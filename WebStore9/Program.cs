@@ -12,9 +12,12 @@ namespace WebStore9
 
             app.UseRouting();
             app.MapControllers();
-            
 
-            app.MapGet("/", () => app.Configuration["Greetings"]);
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapGet("/greetings", () => app.Configuration["Greetings"]);
 
             app.Run();
         }
