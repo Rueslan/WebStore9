@@ -12,8 +12,9 @@ namespace WebStore9
 
             app.UseRouting();
             app.MapControllers();
+            
 
-            app.MapGet("/", () => "Hello World!");
+            app.MapGet("/", () => app.Configuration["Greetings"]);
 
             app.Run();
         }
