@@ -17,5 +17,7 @@ namespace WebStore9.Controllers
         public IActionResult SomeAction(int id) => Content($"First Controller {id}");
 
         public IActionResult Employees() => View(_Employees);
+
+        public IActionResult EmployeeDetails(int id) => View(_Employees[id - 1]);
     }
 }
