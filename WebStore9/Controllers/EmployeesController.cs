@@ -12,6 +12,14 @@ namespace WebStore9.Controllers
 
         public IActionResult Index() => View(_Employees);
 
-        //public IActionResult EmployeeDetails(int id) => View(_Employees[id - 1]);
+        public IActionResult Details(int id)
+        {
+            var employee = _Employees.SingleOrDefault(e => e.Id == id);
+
+            if (employee == null)
+                return NotFound();
+
+            return View(employee);
+        }
     }
 }
