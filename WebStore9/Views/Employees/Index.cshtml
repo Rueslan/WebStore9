@@ -4,7 +4,7 @@
     <h1>Сотрудники</h1>
     <hr/>
 
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>#</th>
@@ -25,12 +25,12 @@
                     <td>@employee.Patronymic</td>
                     <td>@employee.Age</td>
                     <td>@employee.Seniority</td>
-                    <td><a href="EmployeeDetails/@employee.Id">Подробно</a></td>
+                    <td><a asp-controller="Employees" asp-action="Details" asp-route-id="@employee.Id" class="btn btn-default">Подробно</a></td>
                 </tr>
             }
         </tbody>
     </table>
     <p>
-        <a href="/">Главная</a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default">Главная</a>
     </p>
 </div>
