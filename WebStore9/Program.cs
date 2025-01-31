@@ -1,3 +1,5 @@
+using WebStore9.Infrastructure.Middleware;
+
 namespace WebStore9
 {
     public class Program
@@ -14,6 +16,9 @@ namespace WebStore9
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseMiddleware<TestMiddleware>();
+
             app.MapControllers();
 
             app.MapControllerRoute(
