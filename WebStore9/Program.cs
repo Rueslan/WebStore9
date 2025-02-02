@@ -1,5 +1,7 @@
 using WebStore9.Infrastructure.Conventions;
 using WebStore9.Infrastructure.Middleware;
+using WebStore9.Services;
+using WebStore9.Services.Interfaces;
 
 namespace WebStore9
 {
@@ -12,7 +14,10 @@ namespace WebStore9
             builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
 
+            builder.Services.AddSingleton<IEmplyeesData, InMemoryEmployeesData>();
+
             var app = builder.Build();
+
 
             app.UseStaticFiles();
 
