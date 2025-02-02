@@ -2,6 +2,7 @@
 using WebStore9.Data;
 using WebStore9.Models;
 using WebStore9.Services.Interfaces;
+using WebStore9.ViewModels;
 
 namespace WebStore9.Controllers
 {
@@ -32,12 +33,84 @@ namespace WebStore9.Controllers
             return View(employee);
         }
 
-        public IActionResult EmployeeDelete(int id)
+        #region Delete
+        public IActionResult Delete(int id)
+        {
+            if (id < 0) return BadRequest();
+
+            var employee = _EmplyeesData.GetById(id);
+            if (employee == null) 
+                return NotFound();
+
+            _EmplyeesData.Delete(id);
+
+            return View(new EmployeeViewModel
+            {
+                Id = employee.Id,
+                Name = employee.FirstName,
+                LastName = employee.LastName,
+                Patronymic = employee.Patronymic,
+                Age = employee.Age,
+                Seniority = employee.Seniority,
+            });
+        }
+
+        [HttpPost]
+        public IActionResult DeleteConfirmed(int id)
         {
             _EmplyeesData.Delete(id);
 
-            return View("Index", TestData.Employees);
+            return RedirectToAction(nameof(Index));
+        }
+        #endregion
+
+
+        #region Edit
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+                return View(new EmployeeViewModel());
+
+            var employee = _EmplyeesData.GetById((int)id);
+
+            if (employee == null) return NotFound();
+
+            var model = new EmployeeViewModel
+            {
+                Id = employee.Id,
+                Name = employee.FirstName,
+                LastName = employee.LastName,
+                Patronymic = employee.Patronymic,
+                Age = employee.Age,
+                Seniority = employee.Seniority,
+            };
+
+            return View(model);
         }
 
+        [HttpPost]
+        public IActionResult Edit(EmployeeViewModel model)
+        {
+            var employee = new Employee
+            {
+                Id = model.Id,
+                LastName = model.LastName,
+                FirstName = model.Name,
+                Patronymic = model.Patronymic,
+                Age = model.Age,
+                Seniority = model.Seniority,
+            };
+
+            if (employee.Id == 0)
+                _EmplyeesData.Add(employee);
+            else
+                _EmplyeesData.Update(employee);
+
+            return RedirectToAction(nameof(Index));
+        }
+        #endregion
+
+        public IActionResult Create() => View("Edit", new EmployeeViewModel());
     }
 }
