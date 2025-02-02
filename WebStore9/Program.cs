@@ -1,3 +1,4 @@
+using WebStore9.Infrastructure.Conventions;
 using WebStore9.Infrastructure.Middleware;
 
 namespace WebStore9
@@ -8,7 +9,7 @@ namespace WebStore9
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllersWithViews()
+            builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
 
             var app = builder.Build();
