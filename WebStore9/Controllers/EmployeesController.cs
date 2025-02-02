@@ -92,6 +92,12 @@ namespace WebStore9.Controllers
         [HttpPost]
         public IActionResult Edit(EmployeeViewModel model)
         {
+            if (model.Name == "мат")
+                ModelState.AddModelError("", "Низзя!");
+
+            if (!ModelState.IsValid)
+                return View(model);
+
             var employee = new Employee
             {
                 Id = model.Id,
@@ -107,8 +113,9 @@ namespace WebStore9.Controllers
             else
                 _EmplyeesData.Update(employee);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index));            
         }
+
         #endregion
 
         public IActionResult Create() => View("Edit", new EmployeeViewModel());
