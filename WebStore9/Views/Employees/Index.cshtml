@@ -3,33 +3,56 @@
 <div class="container">
     <h1>Сотрудники</h1>
     <hr/>
+    <p>
+    <a asp-controller="Employees" asp-action="Create" class=" btn btn-default">Создать 1</a>
+    </p>
+    <p>
+    <a asp-controller="Employees" asp-action="Edit" class=" btn btn-default">Создать 2</a>
+    </p>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Фамилия</th>
-                <th>Имя</th>
-                <th>Отчество</th>
-                <th>Возраст</th>
-                <th>Старшинство</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var employee in Model)
-            {
+    @if (Model.Any())
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@employee.Id</td>
-                    <td>@employee.LastName</td>
-                    <td>@employee.FirstName</td>
-                    <td>@employee.Patronymic</td>
-                    <td>@employee.Age</td>
-                    <td>@employee.Seniority</td>
-                    <td><a asp-controller="Employees" asp-action="Details" asp-route-id="@employee.Id" class="btn btn-default">Подробно</a></td>
+                    <th>#</th>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Отчество</th>
+                    <th>Возраст</th>
+                    <th>Старшинство</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var employee in Model)
+                {
+                    <tr>
+                        <td>@employee.Id</td>
+                        <td>@employee.LastName</td>
+                        <td>@employee.FirstName</td>
+                        <td>@employee.Patronymic</td>
+                        <td>@employee.Age</td>
+                        <td>@employee.Seniority</td>
+                        <td>
+                            <a asp-controller="Employees" asp-action="Details" asp-route-id="@employee.Id" class="btn btn-default">Подробно</a>
+                            <a asp-controller="Employees" asp-action="Edit" asp-route-id="@employee.Id" class="btn btn-default">Редактировать</a>
+                            <a asp-controller="Employees" asp-action="Delete" asp-route-id="@employee.Id" class="btn btn-danger">Удалить</a>
+                            <form asp-action="DeleteConfirmed" asp-route-id="@employee.Id">
+                                <input type="submit" value="Delete Now" class="btn btn-danger" />
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else 
+    {
+        <p>
+            Сотрудники отсутствуют
+        </p>
+    }
+
     <p>
         <a asp-controller="Home" asp-action="Index" class="btn btn-default">Главная</a>
     </p>
