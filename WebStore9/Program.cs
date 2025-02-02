@@ -15,6 +15,7 @@ namespace WebStore9
                 .AddRazorRuntimeCompilation();
 
             builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+            builder.Services.AddSingleton<IProductData, InMemoryProductData>();
 
             var app = builder.Build();
 
