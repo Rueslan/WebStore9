@@ -4,7 +4,7 @@ using WebStore9.Services.Interfaces;
 
 namespace WebStore9.Services
 {
-    public class InMemoryEmployeesData : IEmplyeesData
+    public class InMemoryEmployeesData : IEmployeesData
     {
         private readonly ILogger<InMemoryEmployeesData> _Logger;
 

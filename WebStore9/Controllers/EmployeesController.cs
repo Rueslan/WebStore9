@@ -10,10 +10,10 @@ namespace WebStore9.Controllers
     [Route("stuff/[action]/{id?}")]
     public class EmployeesController : Controller
     {
-        private readonly IEmplyeesData _EmplyeesData;
+        private readonly IEmployeesData _EmplyeesData;
         private readonly ILogger<EmployeesController> _Logger;
 
-        public EmployeesController(IEmplyeesData EmplyeesData, ILogger<EmployeesController> Logger)
+        public EmployeesController(IEmployeesData EmplyeesData, ILogger<EmployeesController> Logger)
         {
             _EmplyeesData = EmplyeesData;
             _Logger = Logger;

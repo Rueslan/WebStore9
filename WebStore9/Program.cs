@@ -14,7 +14,7 @@ namespace WebStore9
             builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
 
-            builder.Services.AddSingleton<IEmplyeesData, InMemoryEmployeesData>();
+            builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
 
             var app = builder.Build();
 
