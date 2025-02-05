@@ -10,10 +10,10 @@ namespace WebStore9.Controllers
     [Route("stuff/[action]/{id?}")]
     public class EmployeesController : Controller
     {
-        private readonly IEmplyeesData _EmplyeesData;
+        private readonly IEmployeesData _EmplyeesData;
         private readonly ILogger<EmployeesController> _Logger;
 
-        public EmployeesController(IEmplyeesData EmplyeesData, ILogger<EmployeesController> Logger)
+        public EmployeesController(IEmployeesData EmplyeesData, ILogger<EmployeesController> Logger)
         {
             _EmplyeesData = EmplyeesData;
             _Logger = Logger;
@@ -92,6 +92,12 @@ namespace WebStore9.Controllers
         [HttpPost]
         public IActionResult Edit(EmployeeViewModel model)
         {
+            if (model.Name == "мат")
+                ModelState.AddModelError("", "Низзя!");
+
+            if (!ModelState.IsValid)
+                return View(model);
+
             var employee = new Employee
             {
                 Id = model.Id,
@@ -107,8 +113,9 @@ namespace WebStore9.Controllers
             else
                 _EmplyeesData.Update(employee);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index));            
         }
+
         #endregion
 
         public IActionResult Create() => View("Edit", new EmployeeViewModel());

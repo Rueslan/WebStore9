@@ -2,7 +2,7 @@
 
 namespace WebStore9.Services.Interfaces
 {
-    public interface IEmplyeesData
+    public interface IEmployeesData
     {
         IEnumerable<Employee> GetAll();
 

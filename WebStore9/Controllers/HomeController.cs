@@ -22,5 +22,7 @@ namespace WebStore9.Controllers
 
         public IActionResult Page404() => View();
 
+        public IActionResult Statuc(string Code) => Content($"Status code - {Code}");
+
     }
 }

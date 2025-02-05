@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WebStore9Domain\WebStore9Domain.csproj" />
+  </ItemGroup>
+
 </Project>

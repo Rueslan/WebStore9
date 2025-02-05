@@ -14,10 +14,12 @@ namespace WebStore9
             builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
 
-            builder.Services.AddSingleton<IEmplyeesData, InMemoryEmployeesData>();
+            builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+            builder.Services.AddSingleton<IProductData, InMemoryProductData>();
 
             var app = builder.Build();
 
+            //app.UseStatusCodePages();
 
             app.UseStaticFiles();
 
@@ -26,6 +28,8 @@ namespace WebStore9
             app.UseMiddleware<TestMiddleware>();
 
             app.MapControllers();
+
+            //app.UseStatusCodePagesWithReExecute("Home/Status/{0}");
 
             app.MapControllerRoute(
                 name: "default",
