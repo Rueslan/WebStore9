@@ -19,7 +19,7 @@ namespace WebStore9
 
             var app = builder.Build();
 
-            //app.UseStatusCodePages();
+            app.UseStatusCodePagesWithRedirects("~/Home/Status/{0}");
 
             app.UseStaticFiles();
 
@@ -28,8 +28,6 @@ namespace WebStore9
             app.UseMiddleware<TestMiddleware>();
 
             app.MapControllers();
-
-            //app.UseStatusCodePagesWithReExecute("Home/Status/{0}");
 
             app.MapControllerRoute(
                 name: "default",

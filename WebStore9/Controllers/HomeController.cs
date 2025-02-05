@@ -22,7 +22,14 @@ namespace WebStore9.Controllers
 
         public IActionResult Page404() => View();
 
-        public IActionResult Statuc(string Code) => Content($"Status code - {Code}");
+        public IActionResult Status(string id)
+        {
+            switch (id)
+            {
+                case "404": return View("Page404");
+                default: return Content($"Status - {id}");
+            }
+        }
 
     }
 }
