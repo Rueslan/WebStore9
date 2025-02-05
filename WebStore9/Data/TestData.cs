@@ -1,5 +1,4 @@
-﻿using WebStore9.Models;
-using WebStore9Domain.Entities;
+﻿using WebStore9Domain.Entities;
 
 namespace WebStore9.Data
 {
@@ -21,8 +20,8 @@ namespace WebStore9.Data
             new Section {Id = 5, Name="Puma", Order = 3, ParentId = 1},
             new Section {Id = 6, Name="Asics", Order = 4, ParentId = 1},
             new Section {Id = 7, Name="Для Мужчин", Order = 1},
-            new Section {Id = 8, Name="Fendi", Order = 0, ParentId = 7},
-            new Section {Id = 9, Name="Guess", Order = 1, ParentId = 7},
+            new Section {Id = 8, Name="Section Fendi", Order = 0, ParentId = 7},
+            new Section {Id = 9, Name="Section Guess", Order = 1, ParentId = 7},
             new Section {Id = 10, Name="Valentino", Order = 2, ParentId = 7},
             new Section {Id = 11, Name="Dior", Order = 3, ParentId = 7},
             new Section {Id = 12, Name="Versache", Order = 4, ParentId = 7},
@@ -34,9 +33,9 @@ namespace WebStore9.Data
             new Section {Id = 18, Name="Для Женщин", Order = 2},
             new Section {Id = 19, Name="Fendi", Order = 0, ParentId = 18},
             new Section {Id = 20, Name="Guess", Order = 1, ParentId = 18},
-            new Section {Id = 21, Name="Valentino", Order = 2, ParentId = 18},
-            new Section {Id = 22, Name="Dior", Order = 3, ParentId = 18},
-            new Section {Id = 23, Name="Versace", Order = 4, ParentId = 18},
+            new Section {Id = 21, Name="Section Valentino", Order = 2, ParentId = 18},
+            new Section {Id = 22, Name="Section Dior", Order = 3, ParentId = 18},
+            new Section {Id = 23, Name="Section Versache", Order = 4, ParentId = 18},
             new Section {Id = 24, Name="Для Детей", Order = 3},
             new Section {Id = 25, Name="Мода", Order = 4},
             new Section {Id = 26, Name="Для дома", Order = 5},
@@ -59,8 +58,8 @@ namespace WebStore9.Data
 
         public static IEnumerable<Product> Products { get; } = new[]
         {
-            new Product{ Id = 1, Name = "Белое платье", Price = 1025, ImageUrl="product1.jpg", Order = 0, SectionId = 0, BrandId = 1 },
-            new Product{ Id = 2, Name = "Розовое платье", Price = 1025, ImageUrl="product2.jpg", Order = 1, SectionId = 0 },
+            new Product{ Id = 1, Name = "Белое платье", Price = 1025, ImageUrl="product1.jpg", Order = 0, SectionId = 1, BrandId = 1 },
+            new Product{ Id = 2, Name = "Розовое платье", Price = 1025, ImageUrl="product2.jpg", Order = 1, SectionId = 1 },
             new Product{ Id = 3, Name = "Красное платье", Price = 1025, ImageUrl="product3.jpg", Order = 2, SectionId = 3 },
             new Product{ Id = 4, Name = "Джинсы", Price = 1025, ImageUrl="product4.jpg", Order = 3, SectionId = 1 },
             new Product{ Id = 5, Name = "Легкая майка", Price = 1025, ImageUrl="product5.jpg", Order = 4, SectionId = 1, BrandId = 3 },

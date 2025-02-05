@@ -1,8 +1,8 @@
 ﻿using WebStore9.Data;
-using WebStore9.Models;
 using WebStore9.Services.Interfaces;
+using WebStore9Domain.Entities;
 
-namespace WebStore9.Services
+namespace WebStore9.Services.InMemory
 {
     public class InMemoryEmployeesData : IEmployeesData
     {
@@ -47,7 +47,7 @@ namespace WebStore9.Services
             if (employee == null) throw new ArgumentNullException(nameof(employee));
 
             if (TestData.Employees.Contains(employee)) return;
-            
+
             var db_employee = GetById(employee.Id);
             if (db_employee == null) return;
 

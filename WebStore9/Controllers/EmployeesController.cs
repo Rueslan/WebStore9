@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebStore9.Data;
-using WebStore9.Models;
 using WebStore9.Services.Interfaces;
 using WebStore9.ViewModels;
+using WebStore9Domain.Entities;
 
 namespace WebStore9.Controllers
 {
@@ -30,7 +29,15 @@ namespace WebStore9.Controllers
             if (employee == null)
                 return NotFound();
 
-            return View(employee);
+            return View(new EmployeeViewModel
+            {
+                Id = employee.Id,
+                Name = employee.FirstName,
+                LastName = employee.LastName,
+                Patronymic = employee.Patronymic,
+                Age = employee.Age,
+                Seniority = employee.Seniority,
+            });
         }
 
         #region Delete
@@ -98,7 +105,7 @@ namespace WebStore9.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var employee = new Employee
+            var employee = new Employee()
             {
                 Id = model.Id,
                 LastName = model.LastName,
