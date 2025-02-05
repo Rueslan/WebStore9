@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using WebStore9.DAL.Context;
 using WebStore9.Infrastructure.Conventions;
 using WebStore9.Infrastructure.Middleware;
 using WebStore9.Services;
@@ -11,11 +13,14 @@ namespace WebStore9
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
-                .AddRazorRuntimeCompilation();
+            builder.Services.AddDbContext<WebStore9DB>(opt => 
+                opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 
             builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             builder.Services.AddSingleton<IProductData, InMemoryProductData>();
+
+            builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
+                .AddRazorRuntimeCompilation();
 
             var app = builder.Build();
 
