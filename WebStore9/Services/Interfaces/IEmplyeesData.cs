@@ -1,4 +1,4 @@
-﻿using WebStore9.Models;
+﻿using WebStore9Domain.Entities;
 
 namespace WebStore9.Services.Interfaces
 {

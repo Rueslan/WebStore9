@@ -1,6 +1,6 @@
 ﻿using WebStore9.Data;
-using WebStore9.Models;
 using WebStore9.Services.Interfaces;
+using WebStore9Domain.Entities;
 
 namespace WebStore9.Services
 {
