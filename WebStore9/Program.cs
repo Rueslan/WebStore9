@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebStore9.DAL.Context;
+using WebStore9.Data;
 using WebStore9.Infrastructure.Conventions;
 using WebStore9.Infrastructure.Middleware;
 using WebStore9.Services;
@@ -9,12 +10,14 @@ namespace WebStore9
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDbContext<WebStore9DB>(opt => 
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+
+            builder.Services.AddTransient<WebStore9DBInitializer>();
 
             builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             builder.Services.AddSingleton<IProductData, InMemoryProductData>();
@@ -23,6 +26,12 @@ namespace WebStore9
                 .AddRazorRuntimeCompilation();
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var initializer = scope.ServiceProvider.GetRequiredService<WebStore9DBInitializer>();
+                await initializer.InitializeAsync();
+            }
 
             app.UseStatusCodePagesWithRedirects("~/Home/Status/{0}");
 
@@ -40,7 +49,7 @@ namespace WebStore9
 
             app.MapGet("/greetings", () => app.Configuration["Greetings"]);
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }
