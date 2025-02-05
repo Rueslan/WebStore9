@@ -20,7 +20,7 @@ namespace WebStore9.Data
             //var deleted = await _db.Database.EnsureDeletedAsync();
             //var db_created = await _db.Database.EnsureCreatedAsync();
 
-            var pending_migrations = await _db.Database.GetAppliedMigrationsAsync();
+            var pending_migrations = await _db.Database.GetPendingMigrationsAsync();
             var applied_migrations = await _db.Database.GetAppliedMigrationsAsync();
 
             if (pending_migrations.Any())
@@ -63,7 +63,7 @@ namespace WebStore9.Data
                 await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] OFF");
                 await _db.Database.CommitTransactionAsync();
             }
-            _logger.LogInformation("Запись секций выполнена успешно");
+            _logger.LogInformation("Запись брендов выполнена успешно");
 
             _logger.LogInformation("Запись товаров...");
             await using (await _db.Database.BeginTransactionAsync())
