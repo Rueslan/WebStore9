@@ -3,7 +3,7 @@ using WebStore9.Services.Interfaces;
 using WebStore9Domain;
 using WebStore9Domain.Entities;
 
-namespace WebStore9.Services
+namespace WebStore9.Services.InMemory
 {
     public class InMemoryProductData : IProductData
     {

@@ -21,4 +21,8 @@
     <ProjectReference Include="..\WebStore9Domain\WebStore9Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\InSQL\" />
+  </ItemGroup>
+
 </Project>

@@ -17,8 +17,8 @@ namespace WebStore9.Data
         public async Task InitializeAsync()
         {
             _logger.LogInformation("Запуск инициализации БД"); 
-            var deleted = await _db.Database.EnsureDeletedAsync();
-            var db_created = await _db.Database.EnsureCreatedAsync();
+            //var deleted = await _db.Database.EnsureDeletedAsync();
+            //var db_created = await _db.Database.EnsureCreatedAsync();
 
             var pending_migrations = await _db.Database.GetAppliedMigrationsAsync();
             var applied_migrations = await _db.Database.GetAppliedMigrationsAsync();

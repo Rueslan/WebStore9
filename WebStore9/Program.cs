@@ -3,7 +3,7 @@ using WebStore9.DAL.Context;
 using WebStore9.Data;
 using WebStore9.Infrastructure.Conventions;
 using WebStore9.Infrastructure.Middleware;
-using WebStore9.Services;
+using WebStore9.Services.InMemory;
 using WebStore9.Services.Interfaces;
 
 namespace WebStore9
