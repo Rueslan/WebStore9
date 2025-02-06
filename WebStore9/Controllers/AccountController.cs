@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using WebStore9.ViewModels.Identity;
 using WebStore9Domain.Entities.Identity;
 
@@ -45,9 +46,37 @@ namespace WebStore9.Controllers
 
         #endregion
 
-        public IActionResult Login() => View();
+        #region Login
 
-        public IActionResult Logout() => RedirectToAction("Index", "Home");
+        public IActionResult Login(string ReturnUrl = "/") => View(new LoginViewModel { ReturnUrl = ReturnUrl });
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel Model)
+        {
+            if (!ModelState.IsValid) return View(Model);
+
+            var login_result = await _SignInManager.PasswordSignInAsync(
+                Model.UserName, 
+                Model.Password, 
+                Model.RememberMe, 
+                false);
+
+            if (login_result.Succeeded)
+            {
+                return LocalRedirect(Model.ReturnUrl ?? "/");
+            }
+
+            ModelState.AddModelError("", "Ошибка ввода имени пользователя или пароля");
+            return View(Model);
+        }
+
+        #endregion
+
+        public async Task<IActionResult> Logout()
+        {
+            await _SignInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
 
         public IActionResult AccessDenied() => View();
     }
