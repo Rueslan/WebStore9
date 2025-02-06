@@ -1,6 +1,21 @@
-﻿namespace WebStore9.ViewModels.Identity
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebStore9.ViewModels.Identity
 {
     public class RegisterUserViewModel
     {
+        [Required]
+        [Display(Name = "Имя пользователя")]
+        public string UserName { get; set; }
+
+        [Required]
+        [Display(Name = "Пароль")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Required]
+        [Display(Name = "Подтверждение пароля")]
+        [DataType(DataType.Password)]
+        public string PasswordConfirm { get; set; }
     }
 }
