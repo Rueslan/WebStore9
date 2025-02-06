@@ -81,6 +81,9 @@ namespace WebStore9
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseMiddleware<TestMiddleware>();
 
             app.MapControllers();
