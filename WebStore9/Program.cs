@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebStore9.DAL.Context;
 using WebStore9.Data;
@@ -6,6 +7,7 @@ using WebStore9.Infrastructure.Middleware;
 using WebStore9.Services.InMemory;
 using WebStore9.Services.InSQL;
 using WebStore9.Services.Interfaces;
+using WebStore9Domain.Entities.Identity;
 
 namespace WebStore9
 {
@@ -15,8 +17,46 @@ namespace WebStore9
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<WebStore9DB>(opt => 
+            builder.Services.AddDbContext<WebStore9DB>(opt =>
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+
+            builder.Services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<WebStore9DB>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.Configure<IdentityOptions>(opt =>
+            {
+#if DEBUG
+
+
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequiredLength = 3;
+                opt.Password.RequiredUniqueChars = 3;
+#endif
+                opt.User.RequireUniqueEmail = false;
+                opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+                opt.Lockout.AllowedForNewUsers = false;
+                opt.Lockout.MaxFailedAccessAttempts = 10;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            });
+
+            builder.Services.ConfigureApplicationCookie(opt =>
+            {
+                opt.Cookie.Name = "WebStore9";
+                opt.Cookie.HttpOnly = true;
+
+                opt.ExpireTimeSpan = TimeSpan.FromDays(10);
+
+                opt.LoginPath = "/Account/Login";
+                opt.LogoutPath = "/Account/Logout";
+                opt.AccessDeniedPath = "/Account/AccessDenied";
+
+                opt.SlidingExpiration = true;
+            });
 
             builder.Services.AddTransient<WebStore9DBInitializer>();
 
