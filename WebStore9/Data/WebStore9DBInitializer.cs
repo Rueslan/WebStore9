@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using WebStore9.DAL.Context;
 
 namespace WebStore9.Data
@@ -25,7 +26,7 @@ namespace WebStore9.Data
 
             if (pending_migrations.Any())
             {
-                
+
                 _logger.LogInformation("Применение миграций: {0}", string.Join(",", pending_migrations));
                 await _db.Database.MigrateAsync();
             }
@@ -35,59 +36,65 @@ namespace WebStore9.Data
 
         public async Task InitializeProductsAsync()
         {
+            var timer = Stopwatch.StartNew();
+
             if (_db.Sections.Any())
             {
                 _logger.LogInformation("Инициализация БД информацией о товарах не требуется");
                 return;
             }
 
-            _logger.LogInformation("Запись секций...");
+            var sections_pool = TestData.Sections.ToDictionary(s => s.Id);
+            var brands_pool = TestData.Brands.ToDictionary(s => s.Id);
+
+            foreach (var child_section in TestData.Sections.Where(s => s.ParentId is not null))
+            {
+                child_section.Parent = sections_pool[(int)child_section.ParentId!];
+            }
+
+            foreach (var product in TestData.Products)
+            {
+                product.Section = sections_pool[product.SectionId];
+                if (product.BrandId is {} brand_id)
+                {
+                    product.Brand = brands_pool[brand_id];
+                }
+
+                product.Id = 0;
+                product.SectionId = 0;
+                product.BrandId = null;
+            }
+
+            foreach (var section in TestData.Sections)
+            {
+                section.Id = 0;
+                section.ParentId = null;
+            }
+
+            foreach (var brand in TestData.Brands)
+            {
+                brand.Id = 0;
+            }
+
+            foreach (var employee in TestData.Employees)
+            {
+                employee.Id = 0;
+            }
+
+
+            _logger.LogInformation("Запись данных...");
             await using (await _db.Database.BeginTransactionAsync())
             {
                 _db.Sections.AddRange(TestData.Sections);
-
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] ON");
-                await _db.SaveChangesAsync();
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] OFF");
-                await _db.Database.CommitTransactionAsync();
-            }
-            _logger.LogInformation("Запись секций выполнена успешно");
-
-            _logger.LogInformation("Запись брендов...");
-            await using (await _db.Database.BeginTransactionAsync())
-            {
                 _db.Brands.AddRange(TestData.Brands);
-
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] ON");
-                await _db.SaveChangesAsync();
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] OFF");
-                await _db.Database.CommitTransactionAsync();
-            }
-            _logger.LogInformation("Запись брендов выполнена успешно");
-
-            _logger.LogInformation("Запись товаров...");
-            await using (await _db.Database.BeginTransactionAsync())
-            {
                 _db.Products.AddRange(TestData.Products);
-
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] ON");
-                await _db.SaveChangesAsync();
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] OFF");
-                await _db.Database.CommitTransactionAsync();
-            }
-            _logger.LogInformation("Запись товаров выполнена успешно");
-
-            _logger.LogInformation("Запись сотрудников...");
-            await using (await _db.Database.BeginTransactionAsync())
-            {
                 _db.Employees.AddRange(TestData.Employees);
 
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Employees] ON");
                 await _db.SaveChangesAsync();
-                await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Employees] OFF");
                 await _db.Database.CommitTransactionAsync();
             }
-            _logger.LogInformation("Запись сотрудников выполнена успешно");
+            _logger.LogInformation("Запись данных выполнена успешно за {0} мс", timer.Elapsed.TotalMilliseconds);
+
         }
 
     }

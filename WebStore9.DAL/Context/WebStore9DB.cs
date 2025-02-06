@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WebStore9Domain.Entities;
+using WebStore9Domain.Entities.Identity;
 
 namespace WebStore9.DAL.Context
 {
-    public class WebStore9DB : DbContext
+    public class WebStore9DB : IdentityDbContext<User ,Role, string>
     {
         public DbSet<Product> Products { get; set; }
 
