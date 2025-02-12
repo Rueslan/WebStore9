@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebStore9.ViewModels.Identity;
 using WebStore9Domain.Entities.Identity;
 
 namespace WebStore9.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<User> _UserManager;
         private readonly SignInManager<User> _SignInManager;
-
+        
         public AccountController(UserManager<User> UserManager, SignInManager<User> SignInManager)
         {
             _UserManager = UserManager;
@@ -18,9 +20,11 @@ namespace WebStore9.Controllers
 
         #region Registration
 
+        [AllowAnonymous]
         public IActionResult Register() => View(new RegisterUserViewModel());
 
         [HttpPost, ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterUserViewModel Model)
         {
             if (!ModelState.IsValid) return View(Model);
@@ -48,9 +52,11 @@ namespace WebStore9.Controllers
 
         #region Login
 
+        [AllowAnonymous]
         public IActionResult Login(string ReturnUrl = "/") => View(new LoginViewModel{ ReturnUrl = ReturnUrl});
 
         [HttpPost, ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel Model)
         {
             if (!ModelState.IsValid) return View(Model);
@@ -78,6 +84,7 @@ namespace WebStore9.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [AllowAnonymous]
         public IActionResult AccessDenied() => View();
     }
 }
