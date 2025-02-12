@@ -1,4 +1,5 @@
-﻿using WebStore9.DAL.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using WebStore9.DAL.Context;
 using WebStore9.Data;
 using WebStore9.Services.Interfaces;
 using WebStore9Domain;
@@ -26,7 +27,9 @@ namespace WebStore9.Services.InSQL
 
         public IEnumerable<Product> GetProducts(ProductFilter Filter = null)
         {
-            IQueryable<Product> query = _db.Products;
+            IQueryable<Product> query = _db.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Section);
 
             if (Filter?.SectionId != null)
                 query = query.Where(p => p.SectionId == Filter.SectionId);
@@ -36,5 +39,14 @@ namespace WebStore9.Services.InSQL
 
             return query;
         }
+
+        public Product GetProductById(int Id) => _db.Products
+            .Include(p => p.Brand)
+            .Include(p => p.Section)
+            .FirstOrDefault(p => p.Id == Id);
+
+        public Brand GetBrandById(int Id) => _db.Brands.SingleOrDefault(b => b.Id == Id);
+
+        public Section GetSectionById(int Id) => _db.Sections.SingleOrDefault(s => s.Id == Id);
     }
 }
