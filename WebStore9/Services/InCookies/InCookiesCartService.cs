@@ -12,6 +12,17 @@ namespace WebStore9.Services.InCookies
         private readonly IProductData _productData;
         private readonly string _CartName;
 
+        public InCookiesCartService(IHttpContextAccessor httpContextAccessor, IProductData productData)
+        {
+            _httpContextAccessor = (HttpContextAccessor)httpContextAccessor;
+            _productData = productData;
+
+            var user = httpContextAccessor.HttpContext!.User;
+            var user_name = user.Identity.IsAuthenticated ? $"-{user.Identity.Name}" : null;
+
+            _CartName = $"WebStore9.Cart{user_name}";
+        }
+
         private Cart Cart
         {
             get
@@ -37,17 +48,6 @@ namespace WebStore9.Services.InCookies
         {
             cookies.Delete(_CartName);
             cookies.Append(_CartName, cart);
-        }
-
-        public InCookiesCartService(IHttpContextAccessor httpContextAccessor, IProductData productData)
-        {
-            _httpContextAccessor = (HttpContextAccessor)httpContextAccessor;
-            _productData = productData;
-
-            var user = httpContextAccessor.HttpContext!.User;
-            var user_name = user.Identity.IsAuthenticated ? $"-{user.Identity.Name}" : null;
-
-            _CartName = $"WebStore9.Cart{user_name}";
         }
 
         public void Add(int Id)
