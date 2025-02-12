@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebStore9.Services.Interfaces;
 using WebStore9.ViewModels;
 using WebStore9Domain.Entities;
+using WebStore9Domain.Entities.Identity;
 
 namespace WebStore9.Controllers
 {
     [Route("Employees/[action]/{id?}")]
     [Route("stuff/[action]/{id?}")]
+    [Authorize]
     public class EmployeesController : Controller
     {
         private readonly IEmployeesData _EmplyeesData;
@@ -41,6 +44,8 @@ namespace WebStore9.Controllers
         }
 
         #region Delete
+
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Delete(int id)
         {
             if (id < 0) return BadRequest();
@@ -63,6 +68,7 @@ namespace WebStore9.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult DeleteConfirmed(int id)
         {
             _EmplyeesData.Delete(id);
@@ -74,6 +80,7 @@ namespace WebStore9.Controllers
 
         #region Edit
 
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -97,6 +104,7 @@ namespace WebStore9.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Edit(EmployeeViewModel model)
         {
             if (model.Name == "мат")
@@ -125,6 +133,7 @@ namespace WebStore9.Controllers
 
         #endregion
 
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Create() => View("Edit", new EmployeeViewModel());
     }
 }
