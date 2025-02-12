@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using WebStore9.DAL.Context;
 using WebStore9.Data;
 using WebStore9.Infrastructure.Conventions;
@@ -64,6 +65,7 @@ namespace WebStore9
             builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             //builder.Services.AddSingleton<IProductData, InMemoryProductData>();
             builder.Services.AddScoped<IProductData, SqlProductData>();
+            builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddScoped<ICartService, InCookiesCartService>();
 
 

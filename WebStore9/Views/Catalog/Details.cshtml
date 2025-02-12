@@ -26,13 +26,13 @@
 									<a href=""><img src="~/images/product-details/similar1.jpg" alt=""></a>
 									<a href=""><img src="~/images/product-details/similar2.jpg" alt=""></a>
 									<a href=""><img src="~/images/product-details/similar3.jpg" alt=""></a>
-								</div>					 ~/
-								<div class="item">		 ~/
+								</div>					 
+								<div class="item">		 
 									<a href=""><img src="~/images/product-details/similar1.jpg" alt=""></a>
 									<a href=""><img src="~/images/product-details/similar2.jpg" alt=""></a>
 									<a href=""><img src="~/images/product-details/similar3.jpg" alt=""></a>
-								</div>					 ~/
-								<div class="item">		 ~/
+								</div>					 
+								<div class="item">		 
 									<a href=""><img src="~/images/product-details/similar1.jpg" alt=""></a>
 									<a href=""><img src="~/images/product-details/similar2.jpg" alt=""></a>
 									<a href=""><img src="~/images/product-details/similar3.jpg" alt=""></a>
@@ -55,13 +55,13 @@
 							<!--/product-information-->
 							<img src="images/product-details/new.jpg" class="newarrival" alt="" />
 							<h2>@Model.Name</h2>
-							<p>Web ID: @Model.Id.ToString("00000000")</p>
+							<p>Web ID: @Model.Id.ToString("0000000")</p>
 							<img src="~/images/product-details/rating.png" alt="" />
 							<span>
 								<span>@Model.Price.ToString("C")</span>
 								<label>Quantity:</label>
 								<input type="text" value="3" />
-								<a class="btn btn-fefault cart">
+								<a class="btn btn-fefault cart" asp-controller="Cart" asp-action="Add" asp-route-Id="@Model.Id">
 									<i class="fa fa-shopping-cart"></i>
 									Add to cart
 								</a>

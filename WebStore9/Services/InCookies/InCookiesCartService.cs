@@ -39,15 +39,15 @@ namespace WebStore9.Services.InCookies
             cookies.Append(_CartName, cart);
         }
 
-        public InCookiesCartService(HttpContextAccessor httpContextAccessor, IProductData productData)
+        public InCookiesCartService(IHttpContextAccessor httpContextAccessor, IProductData productData)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _httpContextAccessor = (HttpContextAccessor)httpContextAccessor;
             _productData = productData;
 
             var user = httpContextAccessor.HttpContext!.User;
             var user_name = user.Identity.IsAuthenticated ? $"-{user.Identity.Name}" : null;
 
-            _CartName = $"WebStore9,Cart{user_name}";
+            _CartName = $"WebStore9.Cart{user_name}";
         }
 
         public void Add(int Id)

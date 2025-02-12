@@ -6,7 +6,7 @@
             <li><a href="#"><i class="fa fa-keyboar-o"></i> Admin</a></li>
         }
         <li><a href="#"><i class="fa fa-user"></i> @User.Identity!.Name</a></li>
-        <li><a href="#"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+        <li><a asp-controller="Cart" asp-action="Index"><i class="fa fa-shopping-cart"></i> Cart</a></li>
         <li><a asp-controller="Account" asp-action="Logout"><i class="fa fa-lock"></i> Logout</a></li>
     </ul>
 </div>
