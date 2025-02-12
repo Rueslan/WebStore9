@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using WebStore9.Infrastructure.Mapping;
 using WebStore9.Services.Interfaces;
 using WebStore9.ViewModels;
 using WebStore9Domain.Entities;
@@ -99,7 +100,19 @@ namespace WebStore9.Services.InCookies
 
         public CartViewModel GetViewModel()
         {
-            return null;
+            var products = _productData.GetProducts(new()
+            {
+                Ids = Cart.Items.Select(i => i.ProductId).ToArray()
+            });
+
+            var products_views = products.ToView().ToDictionary(p => p.Id);
+
+            return new CartViewModel
+            {
+                Items = Cart.Items
+                    .Where(i => products_views.ContainsKey(i.ProductId))
+                    .Select(i => (products_views[i.ProductId], i.Quantity))
+            };
         }
     }
 }
