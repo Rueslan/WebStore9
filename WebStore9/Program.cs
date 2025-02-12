@@ -4,6 +4,7 @@ using WebStore9.DAL.Context;
 using WebStore9.Data;
 using WebStore9.Infrastructure.Conventions;
 using WebStore9.Infrastructure.Middleware;
+using WebStore9.Services.InCookies;
 using WebStore9.Services.InMemory;
 using WebStore9.Services.InSQL;
 using WebStore9.Services.Interfaces;
@@ -63,6 +64,8 @@ namespace WebStore9
             builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             //builder.Services.AddSingleton<IProductData, InMemoryProductData>();
             builder.Services.AddScoped<IProductData, SqlProductData>();
+            builder.Services.AddScoped<ICartService, InCookiesCartService>();
+
 
             builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
