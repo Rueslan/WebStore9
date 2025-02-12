@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebStore9.ViewModels.Identity;
 using WebStore9Domain.Entities.Identity;
@@ -32,6 +31,8 @@ namespace WebStore9.Controllers
             if (register_result.Succeeded)
             {
                 await _SignInManager.SignInAsync(user, false);
+
+                await _UserManager.AddToRoleAsync(user, Role.Users);
 
                 return RedirectToAction("Index", "Home");
             }
