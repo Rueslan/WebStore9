@@ -8,9 +8,9 @@ namespace WebStore9Domain.Entities
 {
     public class Cart
     {
-        public ICollection<CartItem> items { get; set; } = new List<CartItem>();
+        public ICollection<CartItem> Items { get; set; } = new List<CartItem>();
 
-        public int ItemsCount => items?.Sum(item => item.Quantity) ?? 0;
+        public int ItemsCount => Items?.Sum(item => item.Quantity) ?? 0;
 
     }
 
