@@ -1,3 +1,50 @@
-﻿@{
+﻿@model IEnumerable<WebStore9Domain.Entities.Product>
+
+@{
     ViewBag.Title = "Products catalog management";
 }
+
+<div id="page-wrapper">
+<div id="page-inner">
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>@Html.DisplayNameFor(m => m.Id)</th>
+            <th>@Html.DisplayNameFor(m => m.Name)</th>
+            <th>@Html.DisplayNameFor(m => m.Brand)</th>
+            <th>@Html.DisplayNameFor(m => m.Section)</th>
+            <th>@Html.DisplayNameFor(m => m.ImageUrl)</th>
+            <th>@Html.DisplayNameFor(m => m.Price)</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var product in Model)
+        {
+            var brand = product.Brand?.Name;
+            <tr>
+                <td>
+                    <a href="#">
+                        <i class="glyphicon glyphicon-edit"></i>edit
+                    </a>
+                </td>
+                <td>@Html.DisplayFor(p => product.Id)</td>
+                <td>@Html.DisplayFor(p => product.Name)</td>
+                <td>@Html.DisplayFor(p => brand)</td>
+                <td>@Html.DisplayFor(p => product.Section.Name)</td>
+                <td>@Html.DisplayFor(p => product.Price)</td>
+                <td>
+                    <img src="~/images/shop/@product.ImageUrl" width="50" alt="@product.Name"/>
+                </td>
+                <td>
+                    <a href="#" class="text-danger">
+                        <i class="glyphicon glyphicon-remove"></i>delete
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+</div>
