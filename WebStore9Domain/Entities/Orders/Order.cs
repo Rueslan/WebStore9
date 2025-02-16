@@ -24,6 +24,9 @@ namespace WebStore9Domain.Entities.Orders
         public DateTimeOffset Date { get; set; } = DateTimeOffset.UtcNow;
 
         public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
+
+        [NotMapped]
+        public decimal TotalPrice => Items?.Sum(i => i.TotalItemPrice) ?? 0m;
     }
 
     public class OrderItem : Entity
