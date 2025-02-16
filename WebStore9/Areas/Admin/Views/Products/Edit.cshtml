@@ -1,0 +1,58 @@
+﻿@model ProductViewModel
+
+@{
+    ViewBag.Title = "Edit product";
+}
+<div id="page-wrapper">
+    <div id="page-inner">
+        <div class="container">
+            <h1>Edit</h1>
+
+            <h4>ProductViewModel</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="BrandName" class="control-label"></label>
+                            <input asp-for="BrandName" class="form-control" />
+                            <span asp-validation-for="BrandName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="SectionName" class="control-label"></label>
+                            <input asp-for="SectionName" class="form-control" />
+                            <span asp-validation-for="SectionName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Price" class="control-label"></label>
+                            <input asp-for="Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ImageUrl" class="control-label"></label>
+                            <input asp-for="ImageUrl" class="form-control" />
+                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                        </div>
+                        <input type="hidden" asp-for="BrandId" />
+                        <input type="hidden" asp-for="SectionId" />
+                        <input type="hidden" asp-for="Order" />
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+
+    </div>
+</div>
