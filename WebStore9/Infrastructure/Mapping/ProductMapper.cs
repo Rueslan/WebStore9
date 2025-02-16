@@ -13,10 +13,27 @@ namespace WebStore9.Infrastructure.Mapping
                 Name = product.Name,
                 ImageUrl = product.ImageUrl,
                 Price = product.Price,
-                Brand = product.Brand?.Name,
-                Section = product.Section.Name,
+                BrandName = product.Brand.Name ??= "",
+                BrandId = product.BrandId,
+                SectionName = product.Section.Name,
+                SectionId = product.SectionId,
+                Order = product.Order,
             };
 
         public static IEnumerable<ProductViewModel> ToView(this IEnumerable<Product> products) => products.Select(ToView);
+
+        public static Product ToProduct(this ProductViewModel product_viewModel) => product_viewModel == null
+            ? null
+            : new Product
+            {
+                Id = product_viewModel.Id,
+                Name = product_viewModel.Name,
+                ImageUrl = product_viewModel.ImageUrl,
+                Price = product_viewModel.Price,
+                BrandId = product_viewModel.BrandId,
+                SectionId = product_viewModel.SectionId,
+                Order = product_viewModel.Order,
+            };
+
     }
 }

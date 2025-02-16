@@ -1,5 +1,7 @@
 ﻿using WebStore9.Data;
+using WebStore9.Infrastructure.Mapping;
 using WebStore9.Services.Interfaces;
+using WebStore9.ViewModels;
 using WebStore9Domain;
 using WebStore9Domain.Entities;
 
@@ -29,5 +31,25 @@ namespace WebStore9.Services.InMemory
         public IEnumerable<Section> GetSections() => TestData.Sections;
 
         public Section GetSectionById(int Id) => TestData.Sections.FirstOrDefault(s => s.Id == Id);
+
+        public void DeleteProductById(int Id)
+        {
+            TestData.Products = TestData.Products.Where(p => p != GetProductById(Id));
+        }
+
+        public int Add(Product product)
+        {
+
+            TestData.Products.Append(product);
+
+            return product.Id;
+        }
+
+        public void Update(Product product)
+        {
+            var result = TestData.Products.FirstOrDefault(p => p.Id == product.Id);
+
+            result = product;
+        }
     }
 }

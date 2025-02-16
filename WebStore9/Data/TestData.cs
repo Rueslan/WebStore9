@@ -56,13 +56,13 @@ namespace WebStore9.Data
             new Brand{ Id = 7, Name = "Rosch Creative Culture", Order = 6 },
         };
 
-        public static IEnumerable<Product> Products { get; } = new[]
+        public static IEnumerable<Product> Products { get; set; } = new[]
         {
-            new Product{ Id = 1, Name = "Белое платье", Price = 1025, ImageUrl="product1.jpg", Order = 0, SectionId = 1, BrandId = 1 },
-            new Product{ Id = 2, Name = "Розовое платье", Price = 1025, ImageUrl="product2.jpg", Order = 1, SectionId = 1, BrandId = 2 },
-            new Product{ Id = 3, Name = "Красное платье", Price = 1025, ImageUrl="product3.jpg", Order = 2, SectionId = 3, BrandId = 3 },
-            new Product{ Id = 4, Name = "Джинсы", Price = 1025, ImageUrl="product4.jpg", Order = 3, SectionId = 1, BrandId = 4 },
-            new Product{ Id = 5, Name = "Легкая майка", Price = 1025, ImageUrl="product5.jpg", Order = 4, SectionId = 1, BrandId = 3 },
+            new Product{ Id = 1, Name = "Белое платье", Price = 1025, ImageUrl="product12.jpg", Order = 0, SectionId = 1, BrandId = 1 },
+            new Product{ Id = 2, Name = "Розовое платье", Price = 1025, ImageUrl="product11.jpg", Order = 1, SectionId = 1, BrandId = 2 },
+            new Product{ Id = 3, Name = "Красное платье", Price = 1025, ImageUrl="product7.jpg", Order = 2, SectionId = 3, BrandId = 3 },
+            new Product{ Id = 4, Name = "Джинсы", Price = 1025, ImageUrl="product8.jpg", Order = 3, SectionId = 1, BrandId = 4 },
+            new Product{ Id = 5, Name = "Легкая майка", Price = 1025, ImageUrl="product9.jpg", Order = 4, SectionId = 1, BrandId = 3 },
             new Product{ Id = 6, Name = "Легкое голубое поло", Price = 1025, ImageUrl="product6.jpg", Order = 5, SectionId = 1, BrandId = 5 },
             new Product{ Id = 7, Name = "Платье белое", Price = 1025, ImageUrl="product7.jpg", Order = 6, SectionId = 7, BrandId = 6 },
             new Product{ Id = 8, Name = "Костюм кролика", Price = 1025, ImageUrl="product8.jpg", Order = 7, SectionId = 7, BrandId = 7 },
