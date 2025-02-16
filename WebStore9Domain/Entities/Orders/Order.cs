@@ -19,7 +19,7 @@ namespace WebStore9Domain.Entities.Orders
         [MaxLength(500)]
         public string Address { get; set; }
 
-        public string Decription { get; set; }
+        public string Description { get; set; }
 
         public DateTimeOffset Date { get; set; } = DateTimeOffset.UtcNow;
 
