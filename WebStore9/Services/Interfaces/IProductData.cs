@@ -1,5 +1,4 @@
-﻿using WebStore9.ViewModels;
-using WebStore9Domain;
+﻿using WebStore9Domain;
 using WebStore9Domain.Entities;
 
 namespace WebStore9.Services.Interfaces
@@ -16,12 +15,20 @@ namespace WebStore9.Services.Interfaces
 
         Brand GetBrandById(int Id);
 
+        Brand GetBrandByName(string name);
+
         Section GetSectionById(int Id);
+
+        Section GetSectionByName(string modelSectionName);
 
         void DeleteProductById(int Id);
 
-        int Add(Product product);
+        int AddProduct(Product product);
        
         void Update(Product product);
+
+        int AddBrand(Brand brand);
+        
+        int AddSection(Section section);
     }
 }

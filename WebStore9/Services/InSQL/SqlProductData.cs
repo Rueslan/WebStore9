@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebStore9.DAL.Context;
-using WebStore9.Data;
-using WebStore9.Infrastructure.Mapping;
 using WebStore9.Services.Interfaces;
-using WebStore9.ViewModels;
 using WebStore9Domain;
 using WebStore9Domain.Entities;
 
@@ -12,23 +9,12 @@ namespace WebStore9.Services.InSQL
     public class SqlProductData : IProductData
     {
         private readonly WebStore9DB _db;
-        private int _CurrentMaxId;
 
-        public SqlProductData(WebStore9DB db)
-        {
-            _db = db;
-            _CurrentMaxId = _db.Products.Max(e => e.Id);
-        }
+        public SqlProductData(WebStore9DB db) => _db = db;
 
-        public IEnumerable<Section> GetSections()
-        {
-            return _db.Sections;
-        }
+        public IEnumerable<Section> GetSections() => _db.Sections;
 
-        public IEnumerable<Brand> GetBrands()
-        {
-            return _db.Brands;
-        }
+        public IEnumerable<Brand> GetBrands() => _db.Brands;
 
         public IEnumerable<Product> GetProducts(ProductFilter Filter = null)
         {
@@ -59,7 +45,15 @@ namespace WebStore9.Services.InSQL
 
         public Brand GetBrandById(int Id) => _db.Brands.SingleOrDefault(b => b.Id == Id);
 
-        public Section GetSectionById(int Id) => _db.Sections.SingleOrDefault(s => s.Id == Id);
+        public Brand GetBrandByName(string name) => _db.Brands.FirstOrDefault(b => b.Name == name);
+
+        public Section GetSectionById(int Id) => _db.Sections
+            .Include(s => s.Parent)
+            .FirstOrDefault(s => s.Id == Id);
+
+        public Section GetSectionByName(string modelSectionName) => _db.Sections
+            .Include(s => s.Parent)
+            .FirstOrDefault(s => s.Name == modelSectionName);
 
         public void DeleteProductById(int Id)
         {
@@ -67,21 +61,23 @@ namespace WebStore9.Services.InSQL
             _db.SaveChanges();
         }
 
-        public int Add(Product product)
+        public int AddProduct(Product product)
         {
-            if (product == null) throw new ArgumentNullException(nameof(product));
+            if (product == null) 
+                throw new ArgumentNullException(nameof(product));
 
             if (_db.Products.Contains(product)) return product.Id;
 
-            product.Id = ++_CurrentMaxId;
             _db.Products.Add(product);
+            _db.SaveChanges();
 
             return product.Id;
         }
 
         public void Update(Product product)
         {
-            if (product == null) throw new ArgumentNullException(nameof(product));
+            if (product == null) 
+                throw new ArgumentNullException(nameof(product));
 
             var db_product = GetProductById(product.Id);
             if (db_product == null || db_product == product) return;
@@ -95,6 +91,31 @@ namespace WebStore9.Services.InSQL
             db_product.SectionId = product.SectionId;
 
             _db.SaveChanges();
+        }
+
+        public int AddBrand(Brand brand)
+        {
+            if (brand.Id != 0) 
+                return brand.Id;
+
+            _db.Brands.Add(brand);
+            _db.SaveChanges();
+
+            return brand.Id;
+        }
+
+        public int AddSection(Section section)
+        {
+            if (section == null) 
+                throw new ArgumentNullException(nameof(section));
+
+            if (section.Id != 0) 
+                return section.Id;
+
+            _db.Sections.Add(section);
+            _db.SaveChanges();
+
+            return section.Id;
         }
     }
 }
