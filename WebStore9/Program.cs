@@ -67,6 +67,7 @@ namespace WebStore9
             builder.Services.AddScoped<IProductData, SqlProductData>();
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddScoped<ICartService, InCookiesCartService>();
+            builder.Services.AddScoped<IOrderService, SqlOrderService>();
 
 
             builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
