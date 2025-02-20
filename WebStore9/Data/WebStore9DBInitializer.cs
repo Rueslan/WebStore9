@@ -30,14 +30,19 @@ namespace WebStore9.Data
             //var deleted = await _db.Database.EnsureDeletedAsync();
             //var db_created = await _db.Database.EnsureCreatedAsync();
 
-            var pending_migrations = await _db.Database.GetPendingMigrationsAsync();
-            var applied_migrations = await _db.Database.GetAppliedMigrationsAsync();
-
-            if (pending_migrations.Any())
+            if (_db.Database.ProviderName.EndsWith(".InMemory"))
+                await _db.Database.EnsureCreatedAsync();
+            else
             {
+                var pending_migrations = await _db.Database.GetPendingMigrationsAsync();
+                var applied_migrations = await _db.Database.GetAppliedMigrationsAsync();
 
-                _logger.LogInformation("Применение миграций: {0}", string.Join(",", pending_migrations));
-                await _db.Database.MigrateAsync();
+                if (pending_migrations.Any())
+                {
+
+                    _logger.LogInformation("Применение миграций: {0}", string.Join(",", pending_migrations));
+                    await _db.Database.MigrateAsync();
+                }
             }
 
             try

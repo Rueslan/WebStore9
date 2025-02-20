@@ -36,6 +36,11 @@ namespace WebStore9
                         opt.UseSqlite(builder.Configuration.GetConnectionString(databasetype),
                             o=> o.MigrationsAssembly("WebStore9.DAL.Sqlite")));
                     break;
+
+                case "InMemory":
+                    builder.Services.AddDbContext<WebStore9DB>(opt =>
+                        opt.UseInMemoryDatabase("WebStore9.db"));
+                    break;
             }
 
             
