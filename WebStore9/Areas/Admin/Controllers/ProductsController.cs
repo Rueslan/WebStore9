@@ -80,7 +80,11 @@ namespace WebStore9.Areas.Admin.Controllers
         private Section CreateNewSection(string modelSectionName)
         {
             var sectionMaxOrder = _productData.GetSections().Any()
-                ? _productData.GetSections().Max(p => p.Order) + 1
+                ? _productData.GetSections()
+                    .AsQueryable()
+                    .Select(p => p.Order)
+                    .DefaultIfEmpty(0)
+                    .Max() + 1
                 : 1;
 
             var newSection = new Section { Name = modelSectionName, Order = ++sectionMaxOrder }; //TODO Section Parents
@@ -102,7 +106,10 @@ namespace WebStore9.Areas.Admin.Controllers
         private Brand CreateNewBrand(string brandName)
         {
             var brandMaxOrder = _productData.GetBrands().Any()
-                ? _productData.GetBrands().Max(p => p.Order) + 1
+                ? _productData.GetBrands()
+                    .AsQueryable()
+                    .Select(p => p.Order)
+                    .DefaultIfEmpty(0).Max() + 1
                 : 1; 
                 
             var newBrand = new Brand { Name = brandName, Order = ++brandMaxOrder };
