@@ -8,48 +8,50 @@ namespace WebStore9.Services.InMemory
     {
         private readonly ILogger<InMemoryEmployeesData> _Logger;
 
-        private int _CurrentMaxId;
+        private int _currentMaxId;
 
         public InMemoryEmployeesData(ILogger<InMemoryEmployeesData> Logger)
         {
             _Logger = Logger;
-            _CurrentMaxId = TestData.Employees.Max(e => e.Id);
+            _currentMaxId = TestData.Employees.Max(e => e.Id);
         }
 
-        public int Add(Employee employee)
+        public Task<int> Add(Employee employee)
         {
             if (employee == null) throw new ArgumentNullException(nameof(employee));
 
-            if (TestData.Employees.Contains(employee)) return employee.Id;
+            if (TestData.Employees.Any(e => e.Id == employee.Id)) 
+                return Task.FromResult(employee.Id);
 
-            employee.Id = ++_CurrentMaxId;
+
+            employee.Id = ++_currentMaxId;
             TestData.Employees.Add(employee);
 
-            return employee.Id;
+            return Task.FromResult(employee.Id);
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var db_employee = GetById(id);
-            if (db_employee == null) return false;
+            var db_employee = await GetByIdAsync(id);
+            if (db_employee is null) 
+                return false;
 
             TestData.Employees.Remove(db_employee);
 
             return true;
         }
 
-        public IEnumerable<Employee> GetAll() => TestData.Employees;
+        public Task<IEnumerable<Employee>> GetAll() => Task.FromResult(TestData.Employees.AsEnumerable());
 
-        public Employee GetById(int id) => TestData.Employees.SingleOrDefault(e => e.Id == id);
+        public Task<Employee> GetByIdAsync(int id) => Task.FromResult(TestData.Employees.FirstOrDefault(e => e.Id == id));
 
-        public void Update(Employee employee)
+        public async Task UpdateAsync(Employee employee)
         {
-            if (employee == null) throw new ArgumentNullException(nameof(employee));
+            if (employee is null) throw new ArgumentNullException(nameof(employee));
 
-            if (TestData.Employees.Contains(employee)) return;
-
-            var db_employee = GetById(employee.Id);
-            if (db_employee == null) return;
+            var db_employee = await GetByIdAsync(employee.Id);
+            if (db_employee is null) 
+                return;
 
             db_employee.LastName = employee.LastName;
             db_employee.FirstName = employee.FirstName;

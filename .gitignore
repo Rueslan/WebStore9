@@ -368,3 +368,7 @@ FodyWeavers.xsd
 **/wwwroot/js/site.min.js
 **/wwwroot/js/site.min.js.gz
 **/wwwroot/js/site.min.js.map
+**/wwwroot/images/shop/*
+/WebStore9/WebStore9.db
+/WebStore9/WebStore9.db-shm
+/WebStore9/WebStore9.db-wal

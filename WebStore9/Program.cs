@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using WebStore9.DAL.Context;
@@ -19,8 +20,30 @@ namespace WebStore9
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<WebStore9DB>(opt =>
-                opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+            var databasetype = builder.Configuration["Database"];
+
+            switch (databasetype)
+            {
+                default: throw new InvalidOperationException($"Тип БД {databasetype} не поддерживается");
+
+                case "SqlServer": builder.Services.AddDbContext<WebStore9DB>(opt => 
+                        opt.UseSqlServer(builder.Configuration.GetConnectionString(databasetype)));
+                    break;
+
+                case "Sqlite":
+                    SQLitePCL.Batteries.Init();
+                    builder.Services.AddDbContext<WebStore9DB>(opt =>
+                        opt.UseSqlite(builder.Configuration.GetConnectionString(databasetype),
+                            o=> o.MigrationsAssembly("WebStore9.DAL.Sqlite")));
+                    break;
+
+                case "InMemory":
+                    builder.Services.AddDbContext<WebStore9DB>(opt =>
+                        opt.UseInMemoryDatabase("WebStore9.db"));
+                    break;
+            }
+
+            
 
             builder.Services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<WebStore9DB>()
@@ -67,6 +90,7 @@ namespace WebStore9
             builder.Services.AddScoped<IProductData, SqlProductData>();
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddScoped<ICartService, InCookiesCartService>();
+            builder.Services.AddScoped<IOrderService, SqlOrderService>();
 
 
             builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
@@ -93,9 +117,17 @@ namespace WebStore9
 
             app.MapControllers();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
 
             app.MapGet("/greetings", () => app.Configuration["Greetings"]);
 

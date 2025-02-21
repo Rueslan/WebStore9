@@ -4,14 +4,14 @@ namespace WebStore9.Services.Interfaces
 {
     public interface IEmployeesData
     {
-        IEnumerable<Employee> GetAll();
+        Task<IEnumerable<Employee>> GetAll();
 
-        Employee GetById(int id);
+        Task<Employee?> GetByIdAsync(int id);
 
-        int Add(Employee employee);
+        Task<int> Add(Employee employee);
 
-        void Update(Employee employee);
+        Task UpdateAsync(Employee employee);
 
-        bool Delete(int id);
+        Task<bool> DeleteAsync(int id);
     }
 }

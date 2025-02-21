@@ -12,7 +12,7 @@ namespace WebStore9.Services.Interfaces
 
         void Clear();
 
-        CartViewModel GetViewModel();
+        Task<CartViewModel> GetViewModelAsync();
 
     }
 }

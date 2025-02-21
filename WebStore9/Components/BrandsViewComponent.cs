@@ -4,24 +4,25 @@ using WebStore9.ViewModels;
 
 namespace WebStore9.Components
 {
-    public class BrandsViewComponent: ViewComponent
+    public class BrandsViewComponent : ViewComponent
     {
         private readonly IProductData _ProductData;
 
-        public BrandsViewComponent(IProductData ProductData)
+        public BrandsViewComponent(IProductData ProductData) => _ProductData = ProductData;
+
+        public async Task<IViewComponentResult> InvokeAsync() => View(await GetBrandsAsync());
+
+        private async Task<IEnumerable<BrandViewModel>> GetBrandsAsync()
         {
-            _ProductData = ProductData;
+            var brands = await _ProductData.GetBrandsAsync();
+
+            return brands
+                .OrderBy(b => b.Order)
+                .Select(b => new BrandViewModel
+                {
+                    Id = b.Id,
+                    Name = b.Name,
+                });
         }
-
-        public IViewComponentResult Invoke() => View(GetBrands());
-
-        private IEnumerable<BrandViewModel> GetBrands() =>
-            _ProductData.GetBrands()
-            .OrderBy(b => b.Order)
-            .Select(b => new BrandViewModel
-            {
-                Id = b.Id,
-                Name = b.Name,
-            });
     }
 }

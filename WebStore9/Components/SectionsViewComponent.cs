@@ -13,9 +13,9 @@ namespace WebStore9.Components
             _ProductData = productData;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var sections = _ProductData.GetSections();
+            var sections = await _ProductData.GetSectionsAsync();
 
             var parent_sections = sections.Where(s => s.ParentId is null);
 

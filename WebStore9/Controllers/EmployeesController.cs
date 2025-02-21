@@ -22,12 +22,12 @@ namespace WebStore9.Controllers
         }
 
         [Route("~/employees/all")]
-        public IActionResult Index() => View(_EmplyeesData.GetAll());
+        public async Task<IActionResult> Index() => View(await _EmplyeesData.GetAll());
 
         [Route("~/employees/info-{id}")]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var employee = _EmplyeesData.GetById(id);
+            var employee = await _EmplyeesData.GetByIdAsync(id);
 
             if (employee == null)
                 return NotFound();
@@ -43,18 +43,18 @@ namespace WebStore9.Controllers
             });
         }
 
-        #region Delete
+        #region DeleteAsync
 
         [Authorize(Roles = Role.Administrators)]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id < 0) return BadRequest();
 
-            var employee = _EmplyeesData.GetById(id);
-            if (employee == null) 
+            var employee = await _EmplyeesData.GetByIdAsync(id);
+            if (employee is null) 
                 return NotFound();
 
-            _EmplyeesData.Delete(id);
+            await _EmplyeesData.DeleteAsync(id);
 
             return View(new EmployeeViewModel
             {
@@ -71,7 +71,7 @@ namespace WebStore9.Controllers
         [Authorize(Roles = Role.Administrators)]
         public IActionResult DeleteConfirmed(int id)
         {
-            _EmplyeesData.Delete(id);
+            _EmplyeesData.DeleteAsync(id);
 
             return RedirectToAction(nameof(Index));
         }
@@ -81,12 +81,12 @@ namespace WebStore9.Controllers
         #region Edit
 
         [Authorize(Roles = Role.Administrators)]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
                 return View(new EmployeeViewModel());
 
-            var employee = _EmplyeesData.GetById((int)id);
+            var employee = await _EmplyeesData.GetByIdAsync((int)id);
 
             if (employee == null) return NotFound();
 
@@ -126,7 +126,7 @@ namespace WebStore9.Controllers
             if (employee.Id == 0)
                 _EmplyeesData.Add(employee);
             else
-                _EmplyeesData.Update(employee);
+                _EmplyeesData.UpdateAsync(employee);
 
             return RedirectToAction(nameof(Index));            
         }
