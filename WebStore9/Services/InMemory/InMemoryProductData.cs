@@ -7,13 +7,16 @@ namespace WebStore9.Services.InMemory
 {
     public class InMemoryProductData : IProductData
     {
-        public IEnumerable<Brand> GetBrands() => TestData.Brands;
+        public Task<IEnumerable<Brand>> GetBrandsAsync() => 
+            Task.FromResult(TestData.Brands);
 
-        public Brand GetBrandById(int Id) => TestData.Brands.FirstOrDefault(b => b.Id == Id);
+        public Task<Brand> GetBrandByIdAsync(int Id) => 
+            Task.FromResult(TestData.Brands.FirstOrDefault(b => b.Id == Id));
 
-        public Brand GetBrandByName(string name) => TestData.Brands.FirstOrDefault(b => b.Name == name);
+        public Task<Brand> GetBrandByNameAsync(string name) => 
+            Task.FromResult(TestData.Brands.FirstOrDefault(b => b.Name == name));
 
-        public IEnumerable<Product> GetProducts(ProductFilter Filter = null)
+        public Task<IEnumerable<Product>> GetProductsAsync(ProductFilter Filter = null)
         {
             IEnumerable<Product> query = TestData.Products;
 
@@ -23,42 +26,67 @@ namespace WebStore9.Services.InMemory
             if (Filter?.BrandId != null)
                 query = query.Where(p => p.BrandId == Filter.BrandId);
 
-            return query;
+            return Task.FromResult(query);
         }
 
-        public Product GetProductById(int Id) => TestData.Products.FirstOrDefault(p => p.Id == Id);
+        public Task<Product> GetProductByIdAsync(int Id) =>
+            Task.FromResult(TestData.Products.FirstOrDefault(p => p.Id == Id));
 
-        public IEnumerable<Section> GetSections() => TestData.Sections;
+        public Task<IEnumerable<Section>> GetSectionsAsync() => 
+            Task.FromResult(TestData.Sections);
 
-        public Section GetSectionById(int Id) => TestData.Sections.FirstOrDefault(s => s.Id == Id);
+        public Task<Section> GetSectionByIdAsync(int Id) =>
+            Task.FromResult(TestData.Sections.FirstOrDefault(s => s.Id == Id));
 
-        public Section GetSectionByName(string modelSectionName) =>
-            TestData.Sections.FirstOrDefault(s => s.Name == modelSectionName);
+        public Task<Section> GetSectionByNameAsync(string modelSectionName) =>
+            Task.FromResult(TestData.Sections.FirstOrDefault(s => s.Name == modelSectionName));
 
-        public void DeleteProductById(int Id) => TestData.Products = TestData.Products.Where(p => p != GetProductById(Id));
-
-        public int AddProduct(Product product)
+        public async Task DeleteProductByIdAsync(int Id)
         {
-            TestData.Products.Append(product);
-            return product.Id;
+            var product = await GetProductByIdAsync(Id);
+
+            if (product is not null)
+                TestData.Products = TestData.Products.Where(p => p != product);
         }
 
-        public void Update(Product product)
+        public Task<int> AddProductAsync(Product product)
+        {
+            TestData.Products = TestData.Products.Concat([product]);
+
+            return Task.FromResult(product.Id);
+        }
+
+        public Task UpdateAsync(Product product)
         {
             var result = TestData.Products.FirstOrDefault(p => p.Id == product.Id);
-            result = product;
+
+            if (result is not null)
+            {
+                result.Name = product.Name;
+                result.Brand = product.Brand;
+                result.Price = product.Price;
+                result.Section = product.Section;
+                result.ImageUrl = product.ImageUrl;
+                result.Order = product.Order;
+                result.BrandId = product.BrandId;
+                result.SectionId = product.SectionId;
+            }
+
+            return Task.CompletedTask;
         }
 
-        public int AddBrand(Brand brand)
+        public Task<int> AddBrandAsync(Brand brand)
         {
-            TestData.Brands.Append(brand);
-            return brand.Id;
+            TestData.Brands = TestData.Brands.Concat([brand]);
+
+            return Task.FromResult(brand.Id);
         }
 
-        public int AddSection(Section section)
+        public Task<int> AddSectionAsync(Section section)
         {
-            TestData.Sections.Append(section);
-            return section.Id;
+            TestData.Sections = TestData.Sections.Concat([section]);
+
+            return Task.FromResult(section.Id);
         }
     }
 }

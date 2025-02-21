@@ -11,7 +11,7 @@ namespace WebStore9.Data
             new Employee { Id = 3, LastName = "Сидоров", FirstName = "Сидр", Patronymic = "Сидорович", Age = 44, Seniority = 6 }
         };
 
-        public static IEnumerable<Section> Sections { get; } = new[]
+        public static IEnumerable<Section> Sections { get; set; } = new[]
         {
             new Section {Id = 1, Name="Спорт", Order = 0},
             new Section {Id = 2, Name="Nike", Order = 0, ParentId = 1},
@@ -45,7 +45,7 @@ namespace WebStore9.Data
             new Section {Id = 30, Name="Обувь", Order = 9},
         };
 
-        public static IEnumerable<Brand> Brands { get; } = new[]
+        public static IEnumerable<Brand> Brands { get; set; } = new[]
         {
             new Brand{ Id = 1, Name = "Acne", Order = 0 },
             new Brand{ Id = 2, Name = "Grune Erde", Order = 1 },

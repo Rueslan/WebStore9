@@ -14,7 +14,7 @@ namespace WebStore9.Controllers
             _CartService = CartService;
         }
 
-        public IActionResult Index() => View(new CartOrderViewModel{Cart = _CartService.GetViewModel()});
+        public async Task<IActionResult> Index() => View(new CartOrderViewModel{Cart = await _CartService.GetViewModelAsync()});
 
         public IActionResult Add(int Id)
         {
@@ -41,13 +41,13 @@ namespace WebStore9.Controllers
             if (!ModelState.IsValid)
                 return View(nameof(Index), new CartOrderViewModel
                 {
-                    Cart = _CartService.GetViewModel(),
+                    Cart = await _CartService.GetViewModelAsync(),
                     Order = orderViewModel,
                 });
 
             var order = await orderService.CreateOrder(
                 User.Identity!.Name,
-                _CartService.GetViewModel(),
+                await _CartService.GetViewModelAsync(),
                 orderViewModel);
 
             _CartService.Clear();

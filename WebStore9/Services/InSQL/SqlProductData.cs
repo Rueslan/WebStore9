@@ -12,11 +12,11 @@ namespace WebStore9.Services.InSQL
 
         public SqlProductData(WebStore9DB db) => _db = db;
 
-        public IEnumerable<Section> GetSections() => _db.Sections;
+        public async Task<IEnumerable<Section>> GetSectionsAsync() => await _db.Sections.ToArrayAsync();
 
-        public IEnumerable<Brand> GetBrands() => _db.Brands;
+        public async Task<IEnumerable<Brand>> GetBrandsAsync() => await _db.Brands.ToArrayAsync();
 
-        public IEnumerable<Product> GetProducts(ProductFilter Filter = null)
+        public async Task<IEnumerable<Product>> GetProductsAsync(ProductFilter Filter = null)
         {
             IQueryable<Product> query = _db.Products
                 .Include(p => p.Brand)
@@ -28,92 +28,93 @@ namespace WebStore9.Services.InSQL
             }
             else
             {
-                if (Filter?.SectionId != null)
+                if (Filter?.SectionId is not null)
                     query = query.Where(p => p.SectionId == Filter.SectionId);
 
-                if (Filter?.BrandId != null)
+                if (Filter?.BrandId is not null)
                     query = query.Where(p => p.BrandId == Filter.BrandId);
             }
 
-            return query;
+            return await query.ToArrayAsync();
         }
 
-        public Product GetProductById(int Id) => _db.Products
+        public async Task<Product> GetProductByIdAsync(int Id) => await _db.Products
             .Include(p => p.Brand)
             .Include(p => p.Section)
-            .FirstOrDefault(p => p.Id == Id);
+            .FirstOrDefaultAsync(p => p.Id == Id);
 
-        public Brand GetBrandById(int Id) => _db.Brands.SingleOrDefault(b => b.Id == Id);
+        public async Task<Brand> GetBrandByIdAsync(int Id) => await _db.Brands.FirstOrDefaultAsync(b => b.Id == Id);
 
-        public Brand GetBrandByName(string name) => _db.Brands.FirstOrDefault(b => b.Name == name);
+        public async Task<Brand> GetBrandByNameAsync(string name) => await _db.Brands.FirstOrDefaultAsync(b => b.Name == name);
 
-        public Section GetSectionById(int Id) => _db.Sections
+        public async Task<Section> GetSectionByIdAsync(int Id) => await _db.Sections
             .Include(s => s.Parent)
-            .FirstOrDefault(s => s.Id == Id);
+            .FirstOrDefaultAsync(s => s.Id == Id);
 
-        public Section GetSectionByName(string modelSectionName) => _db.Sections
+        public async Task<Section> GetSectionByNameAsync(string modelSectionName) => await _db.Sections
             .Include(s => s.Parent)
-            .FirstOrDefault(s => s.Name == modelSectionName);
+            .FirstOrDefaultAsync(s => s.Name == modelSectionName);
 
-        public void DeleteProductById(int Id)
+        public async Task DeleteProductByIdAsync(int Id)
         {
-            _db.Products.Remove(GetProductById(Id));
-            _db.SaveChanges();
+            var product = await GetProductByIdAsync(Id);
+
+            if (product is null) 
+                return;
+
+            _db.Products.Remove(product);
+            await _db.SaveChangesAsync();
         }
 
-        public int AddProduct(Product product)
+        public async Task<int> AddProductAsync(Product product)
         {
-            if (product == null) 
+            if (product is null) 
                 throw new ArgumentNullException(nameof(product));
 
-            if (_db.Products.Contains(product)) return product.Id;
+            if (product.Id != 0 && await _db.Products.AnyAsync(p => p.Id == product.Id))
+                return product.Id;
 
-            _db.Products.Add(product);
-            _db.SaveChanges();
+            await _db.Products.AddAsync(product);
+            await _db.SaveChangesAsync();
 
             return product.Id;
         }
 
-        public void Update(Product product)
+        public async Task UpdateAsync(Product product)
         {
-            if (product == null) 
+            if (product is null) 
                 throw new ArgumentNullException(nameof(product));
 
-            var db_product = GetProductById(product.Id);
-            if (db_product == null || db_product == product) return;
+            var db_product = await GetProductByIdAsync(product.Id);
+            if (db_product is null) 
+                return;
 
-            db_product.Name = product.Name;
-            db_product.Price = product.Price;
-            db_product.ImageUrl = product.ImageUrl;
-            db_product.Brand = product.Brand;
-            db_product.Section = product.Section;
-            db_product.BrandId = product.BrandId;
-            db_product.SectionId = product.SectionId;
+            _db.Entry(db_product).CurrentValues.SetValues(product);
 
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
 
-        public int AddBrand(Brand brand)
+        public async Task<int> AddBrandAsync(Brand brand)
         {
-            if (brand.Id != 0) 
+            if (brand.Id != 0 && await _db.Brands.AnyAsync(b => b.Id == brand.Id))
                 return brand.Id;
 
-            _db.Brands.Add(brand);
-            _db.SaveChanges();
+            await _db.Brands.AddAsync(brand);
+            await _db.SaveChangesAsync();
 
             return brand.Id;
         }
 
-        public int AddSection(Section section)
+        public async Task<int> AddSectionAsync(Section section)
         {
             if (section == null) 
                 throw new ArgumentNullException(nameof(section));
 
-            if (section.Id != 0) 
-                return section.Id;
+            if (section.Id != 0 && await _db.Sections.AnyAsync(s => s.Id == section.Id))
+                    return section.Id;
 
-            _db.Sections.Add(section);
-            _db.SaveChanges();
+            await _db.Sections.AddAsync(section);
+            await _db.SaveChangesAsync();
 
             return section.Id;
         }

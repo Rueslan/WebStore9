@@ -16,18 +16,18 @@ namespace WebStore9.Areas.Admin.Controllers
 
         public ProductsController(IProductData ProductData) => _productData = ProductData;
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = _productData.GetProducts();
+            var products = await _productData.GetProductsAsync();
             return View(products);
         }
 
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id is null)
                 return View(new ProductViewModel());
 
-            var product = _productData.GetProductById(id.Value);
+            var product = await _productData.GetProductByIdAsync(id.Value);
 
             return product is null 
                 ? NotFound() 
@@ -35,86 +35,72 @@ namespace WebStore9.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(ProductViewModel model)
+        public async Task<IActionResult> Edit(ProductViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
             var product = model.ToProduct();
 
-            product.Brand = ApplyBrand(model.BrandName);
+            product.Brand = await ApplyBrandAsync(model.BrandName);
             product.BrandId = product.Brand?.Id;
 
-            product.Section = ApplySection(model.SectionName);
+            product.Section = await ApplySectionAsync(model.SectionName);
             product.SectionId = product.Section.Id;
 
             if (model.Id == 0)
-                _productData.AddProduct(product);
+                await _productData.AddProductAsync(product);
             else
-                _productData.Update(product);
+                await _productData.UpdateAsync(product);
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmedAsync(int id)
         {
-            if (id <= 0 || _productData.GetProductById(id) is null)
+            var product = await _productData.GetProductByIdAsync(id);
+            if (product is null)
                 return BadRequest();
 
-            _productData.DeleteProductById(id);
+            await _productData.DeleteProductByIdAsync(id);
 
             return RedirectToAction(nameof(Index));
         }
 
-        private Section ApplySection(string modelSectionName)
+        private async Task<Section> ApplySectionAsync(string modelSectionName)
         {
-            var currentSection = _productData.GetSectionByName(modelSectionName);
+            var currentSection = await _productData.GetSectionByNameAsync(modelSectionName);
 
-            if (_productData.GetSections().Contains(currentSection))
-                return currentSection;
-            else
-                return CreateNewSection(modelSectionName);
+            return currentSection ?? await CreateNewSectionAsync(modelSectionName);
         }
 
-        private Section CreateNewSection(string modelSectionName)
+        private async Task<Section> CreateNewSectionAsync(string modelSectionName)
         {
-            var sectionMaxOrder = _productData.GetSections().Any()
-                ? _productData.GetSections()
-                    .AsQueryable()
-                    .Select(p => p.Order)
-                    .DefaultIfEmpty(0)
-                    .Max() + 1
-                : 1;
+            var sections = await _productData.GetSectionsAsync();
+            var sectionMaxOrder = sections.Any() ? sections.Max(p => p.Order) + 1 : 1;
 
             var newSection = new Section { Name = modelSectionName, Order = ++sectionMaxOrder }; //TODO Section Parents
 
-            _productData.AddSection(newSection);
+            await _productData.AddSectionAsync(newSection);
             return newSection;
         }
 
-        private Brand ApplyBrand(string brandName)
+        private async Task<Brand> ApplyBrandAsync(string brandName)
         {
-            var currentBrand = _productData.GetBrandByName(brandName);
+            var currentBrand = await _productData.GetBrandByNameAsync(brandName);
 
-            if (_productData.GetBrands().Contains(currentBrand))
-                return currentBrand;
-            else
-                return CreateNewBrand(brandName);
+            return currentBrand ?? await CreateNewBrandAsync(brandName);
         }
 
-        private Brand CreateNewBrand(string brandName)
+        private async Task<Brand> CreateNewBrandAsync(string brandName)
         {
-            var brandMaxOrder = _productData.GetBrands().Any()
-                ? _productData.GetBrands()
-                    .AsQueryable()
-                    .Select(p => p.Order)
-                    .DefaultIfEmpty(0).Max() + 1
-                : 1; 
+            var brands = await _productData.GetBrandsAsync();
+            var brandMaxOrder = brands.Any() ? brands.Max(p => p.Order) + 1 : 1;
                 
             var newBrand = new Brand { Name = brandName, Order = ++brandMaxOrder };
 
-            _productData.AddBrand(newBrand);
+            await _productData.AddBrandAsync(newBrand);
             return newBrand;
         }
     }

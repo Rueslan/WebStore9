@@ -10,12 +10,9 @@ namespace WebStore9.Controllers
     {
         private readonly IProductData _ProductData;
 
-        public CatalogController(IProductData ProductData)
-        {
-            _ProductData = ProductData;
-        }
+        public CatalogController(IProductData ProductData) => _ProductData = ProductData;
 
-        public IActionResult Index(int? BrandId, int? SectionId)
+        public async Task<IActionResult> Index(int? BrandId, int? SectionId)
         {
             var Filter = new ProductFilter
             {
@@ -23,7 +20,7 @@ namespace WebStore9.Controllers
                 SectionId = SectionId,
             };
 
-            var products = _ProductData.GetProducts(Filter);
+            var products = await _ProductData.GetProductsAsync(Filter);
 
             var view_model = new CatalogViewModel
             {
@@ -35,9 +32,9 @@ namespace WebStore9.Controllers
             return View(view_model);
         }
 
-        public IActionResult Details(int Id)
+        public async Task<IActionResult> Details(int Id)
         {
-            var product = _ProductData.GetProductById(Id);
+            var product = await _ProductData.GetProductByIdAsync(Id);
 
             if (product is null)
                 return NotFound();
