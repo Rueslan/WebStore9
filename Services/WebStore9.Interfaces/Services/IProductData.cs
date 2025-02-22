@@ -1,7 +1,7 @@
 ﻿using WebStore9Domain;
 using WebStore9Domain.Entities;
 
-namespace WebStore9.Services.Interfaces
+namespace WebStore9.Interfaces.Services
 {
     public interface IProductData
     {
@@ -24,7 +24,7 @@ namespace WebStore9.Services.Interfaces
         Task DeleteProductByIdAsync(int Id);
 
         Task<int> AddProductAsync(Product product);
-       
+
         Task UpdateAsync(Product product);
 
         Task<int> AddBrandAsync(Brand brand);

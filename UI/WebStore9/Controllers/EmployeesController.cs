@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebStore9.Services.Interfaces;
+using WebStore9.Interfaces.Services;
 using WebStore9Domain.Entities;
 using WebStore9Domain.Entities.Identity;
 using WebStore9Domain.ViewModels;

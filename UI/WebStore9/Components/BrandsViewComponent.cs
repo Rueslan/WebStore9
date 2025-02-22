@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebStore9.Services.Interfaces;
+using WebStore9.Interfaces.Services;
 using WebStore9Domain.ViewModels;
 
 namespace WebStore9.Components

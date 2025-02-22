@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebStore9.DAL.Context;
-using WebStore9.Services.Interfaces;
+using WebStore9.Interfaces.Services;
 using WebStore9Domain;
 using WebStore9Domain.Entities;
 

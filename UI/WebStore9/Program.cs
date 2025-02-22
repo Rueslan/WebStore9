@@ -6,10 +6,10 @@ using WebStore9.DAL.Context;
 using WebStore9.Data;
 using WebStore9.Infrastructure.Conventions;
 using WebStore9.Infrastructure.Middleware;
+using WebStore9.Interfaces.Services;
 using WebStore9.Services.InCookies;
 using WebStore9.Services.InMemory;
 using WebStore9.Services.InSQL;
-using WebStore9.Services.Interfaces;
 using WebStore9Domain.Entities.Identity;
 
 namespace WebStore9

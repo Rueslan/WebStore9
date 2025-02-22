@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebStore9.DAL.Context;
-using WebStore9.Services.Interfaces;
+using WebStore9.Interfaces.Services;
 using WebStore9Domain.Entities.Identity;
 using WebStore9Domain.Entities.Orders;
 using WebStore9Domain.ViewModels;

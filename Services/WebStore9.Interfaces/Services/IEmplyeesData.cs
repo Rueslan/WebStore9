@@ -1,6 +1,6 @@
 ﻿using WebStore9Domain.Entities;
 
-namespace WebStore9.Services.Interfaces
+namespace WebStore9.Interfaces.Services
 {
     public interface IEmployeesData
     {
