@@ -1,5 +1,5 @@
-﻿using WebStore9.ViewModels;
-using WebStore9Domain.Entities;
+﻿using WebStore9Domain.Entities;
+using WebStore9Domain.ViewModels;
 
 namespace WebStore9.Infrastructure.Mapping
 {

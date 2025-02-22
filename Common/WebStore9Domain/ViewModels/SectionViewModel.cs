@@ -1,4 +1,4 @@
-﻿namespace WebStore9.ViewModels
+﻿namespace WebStore9Domain.ViewModels
 {
     public class SectionViewModel
     {
@@ -6,7 +6,7 @@
 
         public string Name { get; set; }
 
-        public int Order {  get; set; }
+        public int Order { get; set; }
 
         public SectionViewModel Parent { get; set; }
 

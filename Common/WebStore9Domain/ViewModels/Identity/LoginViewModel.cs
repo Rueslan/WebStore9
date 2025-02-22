@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
-namespace WebStore9.ViewModels.Identity
+namespace WebStore9Domain.ViewModels.Identity
 {
-    public class RegisterUserViewModel
+    public class LoginViewModel
     {
         [Required]
         [Display(Name = "Имя пользователя")]
@@ -13,10 +14,10 @@ namespace WebStore9.ViewModels.Identity
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required]
-        [Display(Name = "Подтверждение пароля")]
-        [DataType(DataType.Password)]
-        [Compare(nameof(Password))]
-        public string PasswordConfirm { get; set; }
+        [Display(Name = "Запомнить меня")]
+        public bool RememberMe { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public string ReturnUrl { get; set; }
     }
 }

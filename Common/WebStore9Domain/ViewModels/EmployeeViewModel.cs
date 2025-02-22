@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebStore9.ViewModels
+namespace WebStore9Domain.ViewModels
 {
     public class EmployeeViewModel : IValidatableObject
     {

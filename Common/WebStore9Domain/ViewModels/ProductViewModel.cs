@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using WebStore9Domain.Entities;
 
-namespace WebStore9.ViewModels
+namespace WebStore9Domain.ViewModels
 {
 
     public class ProductViewModel : IValidatableObject
