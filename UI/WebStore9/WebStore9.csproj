@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebStore9.DAL.Sqlite\WebStore9.DAL.Sqlite.csproj" />
-    <ProjectReference Include="..\WebStore9.DAL\WebStore9.DAL.csproj" />
-    <ProjectReference Include="..\WebStore9Domain\WebStore9Domain.csproj" />
+    <ProjectReference Include="..\..\Common\WebStore9Domain\WebStore9Domain.csproj" />
+    <ProjectReference Include="..\..\Data\WebStore9.DAL.Sqlite\WebStore9.DAL.Sqlite.csproj" />
+    <ProjectReference Include="..\..\Data\WebStore9.DAL\WebStore9.DAL.csproj" />
   </ItemGroup>
 
 </Project>
