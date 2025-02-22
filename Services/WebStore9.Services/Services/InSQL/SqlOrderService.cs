@@ -6,7 +6,7 @@ using WebStore9Domain.Entities.Identity;
 using WebStore9Domain.Entities.Orders;
 using WebStore9Domain.ViewModels;
 
-namespace WebStore9.Services.InSQL
+namespace WebStore9.Services.Services.InSQL
 {
     public class SqlOrderService : IOrderService
     {

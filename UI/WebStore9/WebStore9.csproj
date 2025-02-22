@@ -24,6 +24,7 @@
     <ProjectReference Include="..\..\Data\WebStore9.DAL.Sqlite\WebStore9.DAL.Sqlite.csproj" />
     <ProjectReference Include="..\..\Data\WebStore9.DAL\WebStore9.DAL.csproj" />
     <ProjectReference Include="..\..\Services\WebStore9.Interfaces\WebStore9.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Services\WebStore9.Services\WebStore9.Services.csproj" />
   </ItemGroup>
 
 </Project>

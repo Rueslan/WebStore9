@@ -1,6 +1,6 @@
 ﻿using WebStore9Domain.Entities;
 
-namespace WebStore9.Data
+namespace WebStore9.Services.Data
 {
     public static class TestData
     {

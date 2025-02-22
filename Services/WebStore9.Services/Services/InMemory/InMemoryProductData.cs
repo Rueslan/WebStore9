@@ -1,19 +1,19 @@
-﻿using WebStore9.Data;
-using WebStore9.Interfaces.Services;
+﻿using WebStore9.Interfaces.Services;
+using WebStore9.Services.Data;
 using WebStore9Domain;
 using WebStore9Domain.Entities;
 
-namespace WebStore9.Services.InMemory
+namespace WebStore9.Services.Services.InMemory
 {
     public class InMemoryProductData : IProductData
     {
-        public Task<IEnumerable<Brand>> GetBrandsAsync() => 
+        public Task<IEnumerable<Brand>> GetBrandsAsync() =>
             Task.FromResult(TestData.Brands);
 
-        public Task<Brand> GetBrandByIdAsync(int Id) => 
+        public Task<Brand> GetBrandByIdAsync(int Id) =>
             Task.FromResult(TestData.Brands.FirstOrDefault(b => b.Id == Id));
 
-        public Task<Brand> GetBrandByNameAsync(string name) => 
+        public Task<Brand> GetBrandByNameAsync(string name) =>
             Task.FromResult(TestData.Brands.FirstOrDefault(b => b.Name == name));
 
         public Task<IEnumerable<Product>> GetProductsAsync(ProductFilter Filter = null)
@@ -32,7 +32,7 @@ namespace WebStore9.Services.InMemory
         public Task<Product> GetProductByIdAsync(int Id) =>
             Task.FromResult(TestData.Products.FirstOrDefault(p => p.Id == Id));
 
-        public Task<IEnumerable<Section>> GetSectionsAsync() => 
+        public Task<IEnumerable<Section>> GetSectionsAsync() =>
             Task.FromResult(TestData.Sections);
 
         public Task<Section> GetSectionByIdAsync(int Id) =>

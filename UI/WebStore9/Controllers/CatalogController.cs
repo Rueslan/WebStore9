@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebStore9.Infrastructure.Mapping;
 using WebStore9.Interfaces.Services;
 using WebStore9Domain.ViewModels;
 using WebStore9Domain;
+using WebStore9.Services.Mapping;
 
 namespace WebStore9.Controllers
 {

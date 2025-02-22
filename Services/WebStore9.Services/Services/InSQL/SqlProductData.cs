@@ -4,7 +4,7 @@ using WebStore9.Interfaces.Services;
 using WebStore9Domain;
 using WebStore9Domain.Entities;
 
-namespace WebStore9.Services.InSQL
+namespace WebStore9.Services.Services.InSQL
 {
     public class SqlProductData : IProductData
     {
@@ -59,7 +59,7 @@ namespace WebStore9.Services.InSQL
         {
             var product = await GetProductByIdAsync(Id);
 
-            if (product is null) 
+            if (product is null)
                 return;
 
             _db.Products.Remove(product);
@@ -68,7 +68,7 @@ namespace WebStore9.Services.InSQL
 
         public async Task<int> AddProductAsync(Product product)
         {
-            if (product is null) 
+            if (product is null)
                 throw new ArgumentNullException(nameof(product));
 
             if (product.Id != 0 && await _db.Products.AnyAsync(p => p.Id == product.Id))
@@ -82,11 +82,11 @@ namespace WebStore9.Services.InSQL
 
         public async Task UpdateAsync(Product product)
         {
-            if (product is null) 
+            if (product is null)
                 throw new ArgumentNullException(nameof(product));
 
             var db_product = await GetProductByIdAsync(product.Id);
-            if (db_product is null) 
+            if (db_product is null)
                 return;
 
             _db.Entry(db_product).CurrentValues.SetValues(product);
@@ -107,11 +107,11 @@ namespace WebStore9.Services.InSQL
 
         public async Task<int> AddSectionAsync(Section section)
         {
-            if (section == null) 
+            if (section == null)
                 throw new ArgumentNullException(nameof(section));
 
             if (section.Id != 0 && await _db.Sections.AnyAsync(s => s.Id == section.Id))
-                    return section.Id;
+                return section.Id;
 
             await _db.Sections.AddAsync(section);
             await _db.SaveChangesAsync();

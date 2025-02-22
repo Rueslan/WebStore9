@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
-using WebStore9.Infrastructure.Mapping;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using WebStore9.Interfaces.Services;
+using WebStore9.Services.Mapping;
 using WebStore9Domain.Entities;
 using WebStore9Domain.ViewModels;
 
-namespace WebStore9.Services.InCookies
+namespace WebStore9.Services.Services.InCookies
 {
     public class InCookiesCartService : ICartService
     {
@@ -116,4 +117,3 @@ namespace WebStore9.Services.InCookies
         }
     }
 }
- 

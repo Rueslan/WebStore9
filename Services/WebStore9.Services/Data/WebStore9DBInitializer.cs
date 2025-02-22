@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 using WebStore9.DAL.Context;
 using WebStore9Domain.Entities.Identity;
 
-namespace WebStore9.Data
+namespace WebStore9.Services.Data
 {
     public class WebStore9DBInitializer
     {
@@ -171,15 +172,15 @@ namespace WebStore9.Data
                 }
                 else
                 {
-                    var errors = creation_result.Errors.Select(e=>e.Description).ToArray();
-                    _logger.LogError($"Учётная запись администратора не создана! Ошибки: {string.Join(", ",errors)}");
+                    var errors = creation_result.Errors.Select(e => e.Description).ToArray();
+                    _logger.LogError($"Учётная запись администратора не создана! Ошибки: {string.Join(", ", errors)}");
 
                     throw new InvalidOperationException($"Невозможно создать администратора {string.Join(", ", errors)}");
                 }
 
                 _logger.LogInformation("Инициализация системы Identity выполнена успешно за {0} мс", timer.Elapsed.TotalMilliseconds);
             }
-            
+
         }
 
     }

@@ -1,8 +1,9 @@
-﻿using WebStore9.Data;
+﻿using Microsoft.Extensions.Logging;
 using WebStore9.Interfaces.Services;
+using WebStore9.Services.Data;
 using WebStore9Domain.Entities;
 
-namespace WebStore9.Services.InMemory
+namespace WebStore9.Services.Services.InMemory
 {
     public class InMemoryEmployeesData : IEmployeesData
     {
@@ -20,7 +21,7 @@ namespace WebStore9.Services.InMemory
         {
             if (employee == null) throw new ArgumentNullException(nameof(employee));
 
-            if (TestData.Employees.Any(e => e.Id == employee.Id)) 
+            if (TestData.Employees.Any(e => e.Id == employee.Id))
                 return Task.FromResult(employee.Id);
 
 
@@ -33,7 +34,7 @@ namespace WebStore9.Services.InMemory
         public async Task<bool> DeleteAsync(int id)
         {
             var db_employee = await GetByIdAsync(id);
-            if (db_employee is null) 
+            if (db_employee is null)
                 return false;
 
             TestData.Employees.Remove(db_employee);
@@ -50,7 +51,7 @@ namespace WebStore9.Services.InMemory
             if (employee is null) throw new ArgumentNullException(nameof(employee));
 
             var db_employee = await GetByIdAsync(employee.Id);
-            if (db_employee is null) 
+            if (db_employee is null)
                 return;
 
             db_employee.LastName = employee.LastName;
