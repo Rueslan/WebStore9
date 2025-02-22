@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using WebStore9Domain.Entities;
 
 namespace WebStore9Domain.ViewModels
 {
