@@ -9,13 +9,13 @@ namespace WebStore9.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _UserManager;
-        private readonly SignInManager<User> _SignInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         
-        public AccountController(UserManager<User> UserManager, SignInManager<User> SignInManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            _UserManager = UserManager;
-            _SignInManager = SignInManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         #region Registration
@@ -25,27 +25,27 @@ namespace WebStore9.Controllers
 
         [HttpPost, ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(RegisterUserViewModel Model)
+        public async Task<IActionResult> Register(RegisterUserViewModel model)
         {
-            if (!ModelState.IsValid) return View(Model);
+            if (!ModelState.IsValid) return View(model);
 
-            var user = new User { UserName = Model.UserName };
+            var user = new User { UserName = model.UserName };
 
-            var register_result = await _UserManager.CreateAsync(user, Model.Password);
-            if (register_result.Succeeded)
+            var registerResult = await _userManager.CreateAsync(user, model.Password);
+            if (registerResult.Succeeded)
             {
-                await _SignInManager.SignInAsync(user, false);
+                await _signInManager.SignInAsync(user, false);
 
-                await _UserManager.AddToRoleAsync(user, Role.Users);
+                await _userManager.AddToRoleAsync(user, Role.Users);
 
                 return RedirectToAction("Index", "Home");
             }
 
-            foreach (var error in register_result.Errors)
+            foreach (var error in registerResult.Errors)
                 ModelState.AddModelError("", error.Description);
 
 
-            return View(Model);
+            return View(model);
         }
 
         #endregion
@@ -53,34 +53,32 @@ namespace WebStore9.Controllers
         #region Login
 
         [AllowAnonymous]
-        public IActionResult Login(string ReturnUrl = "/") => View(new LoginViewModel{ ReturnUrl = ReturnUrl});
+        public IActionResult Login(string returnUrl = "/") => View(new LoginViewModel{ ReturnUrl = returnUrl});
 
         [HttpPost, ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel Model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid) return View(Model);
+            if (!ModelState.IsValid) return View(model);
 
-            var login_result = await _SignInManager.PasswordSignInAsync(
-                Model.UserName, 
-                Model.Password, 
-                Model.RememberMe, 
+            var loginResult = await _signInManager.PasswordSignInAsync(
+                model.UserName, 
+                model.Password, 
+                model.RememberMe, 
                 false);
 
-            if (login_result.Succeeded)
-            {
-                return LocalRedirect(Model.ReturnUrl ?? "/");
-            }
+            if (loginResult.Succeeded)
+                return LocalRedirect(model.ReturnUrl);
 
             ModelState.AddModelError("", "Ошибка ввода имени пользователя или пароля");
-            return View(Model);
+            return View(model);
         }
 
         #endregion
 
         public async Task<IActionResult> Logout()
         {
-            await _SignInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
