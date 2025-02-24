@@ -13,17 +13,17 @@ namespace WebStore9.WebAPI.Controllers
         public EmployeesApiController(IEmployeesData employeesData) => _employeesData = employeesData;
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            var employees = await _employeesData.GetAll();
+            var employees = _employeesData.GetAll();
 
             return Ok(employees);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public IActionResult GetById(int id)
         {
-            var employee = await _employeesData.GetByIdAsync(id);
+            var employee = _employeesData.GetById(id);
             if (employee is null)
                 return NotFound();
 
@@ -31,25 +31,25 @@ namespace WebStore9.WebAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(Employee employee)
+        public IActionResult Update(Employee employee)
         {
-            await _employeesData.UpdateAsync(employee);
+            _employeesData.Update(employee);
 
             return Ok(employee);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Employee employee)
+        public IActionResult Add(Employee employee)
         {
-            var id = await _employeesData.Add(employee);
+            var id = _employeesData.Add(employee);
 
             return CreatedAtAction(nameof(GetById), new { id }, employee);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
-            var result = await _employeesData.DeleteAsync(id);
+            var result = _employeesData.Delete(id);
 
             return result ? Ok(true) : NotFound(false);
         }

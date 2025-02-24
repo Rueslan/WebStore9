@@ -9,37 +9,36 @@ namespace WebStore9.WebAPI.Clients.Employees
     {
         public EmployeesClient(HttpClient client) : base(client, "api/employees") { }
 
-        public Task<IEnumerable<Employee>> GetAll()
+        public IEnumerable<Employee> GetAll()
         {
-            var employees = GetAsync<IEnumerable<Employee>>(Address);
+            var employees = Get<IEnumerable<Employee>>(Address);
             return employees;
         }
 
-        public Task<Employee?> GetByIdAsync(int id)
+        public Employee? GetById(int id)
         {
-            var result = GetAsync<Employee?>($"{Address}/{id}");
+            var result = Get<Employee?>($"{Address}/{id}");
             return result;
         }
 
-        public Task<int> Add(Employee employee)
+        public int Add(Employee employee)
         {
             var response = Post(Address, employee);
             var addedEmployee = response.Content.ReadFromJsonAsync<Employee>();
             var id = addedEmployee.Id;
-            return Task.FromResult(id);
+            return id;
         }
 
-        public Task UpdateAsync(Employee employee)
+        public void Update(Employee employee)
         {
             Put(Address, employee);
-            return Task.CompletedTask;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public bool Delete(int id)
         {
             var response = Delete($"{Address}/{id}");
             var success = response.IsSuccessStatusCode;
-            return Task.FromResult(success);
+            return success;
         }
     }
 }
