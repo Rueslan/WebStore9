@@ -7,16 +7,16 @@ namespace WebStore9.Services.Services.InMemory
 {
     public class InMemoryProductData : IProductData
     {
-        public Task<IEnumerable<Brand>> GetBrandsAsync() =>
-            Task.FromResult(TestData.Brands);
+        public IEnumerable<Brand> GetBrands() =>
+            TestData.Brands;
 
-        public Task<Brand> GetBrandByIdAsync(int Id) =>
-            Task.FromResult(TestData.Brands.FirstOrDefault(b => b.Id == Id));
+        public Brand GetBrandById(int Id) =>
+            TestData.Brands.FirstOrDefault(b => b.Id == Id);
 
-        public Task<Brand> GetBrandByNameAsync(string name) =>
-            Task.FromResult(TestData.Brands.FirstOrDefault(b => b.Name == name));
+        public Brand GetBrandByName(string name) =>
+            TestData.Brands.FirstOrDefault(b => b.Name == name);
 
-        public Task<IEnumerable<Product>> GetProductsAsync(ProductFilter Filter = null)
+        public IEnumerable<Product> GetProducts(ProductFilter Filter = null)
         {
             IEnumerable<Product> query = TestData.Products;
 
@@ -26,37 +26,41 @@ namespace WebStore9.Services.Services.InMemory
             if (Filter?.BrandId != null)
                 query = query.Where(p => p.BrandId == Filter.BrandId);
 
-            return Task.FromResult(query);
+            return query;
         }
 
-        public Task<Product> GetProductByIdAsync(int Id) =>
-            Task.FromResult(TestData.Products.FirstOrDefault(p => p.Id == Id));
+        public Product GetProductById(int Id) =>
+            TestData.Products.FirstOrDefault(p => p.Id == Id);
 
-        public Task<IEnumerable<Section>> GetSectionsAsync() =>
-            Task.FromResult(TestData.Sections);
+        public IEnumerable<Section> GetSections() =>
+            TestData.Sections;
 
-        public Task<Section> GetSectionByIdAsync(int Id) =>
-            Task.FromResult(TestData.Sections.FirstOrDefault(s => s.Id == Id));
+        public Section GetSectionById(int Id) =>
+            TestData.Sections.FirstOrDefault(s => s.Id == Id);
 
-        public Task<Section> GetSectionByNameAsync(string modelSectionName) =>
-            Task.FromResult(TestData.Sections.FirstOrDefault(s => s.Name == modelSectionName));
+        public Section GetSectionByName(string modelSectionName) =>
+            TestData.Sections.FirstOrDefault(s => s.Name == modelSectionName);
 
-        public async Task DeleteProductByIdAsync(int Id)
+        public bool DeleteProductById(int Id)
         {
-            var product = await GetProductByIdAsync(Id);
+            var product = GetProductById(Id);
 
             if (product is not null)
                 TestData.Products = TestData.Products.Where(p => p != product);
+            else
+                return false;
+
+            return true;
         }
 
-        public Task<int> AddProductAsync(Product product)
+        public int AddProduct(Product product)
         {
             TestData.Products = TestData.Products.Concat([product]);
 
-            return Task.FromResult(product.Id);
+            return product.Id;
         }
 
-        public Task UpdateAsync(Product product)
+        public void Update(Product product)
         {
             var result = TestData.Products.FirstOrDefault(p => p.Id == product.Id);
 
@@ -71,22 +75,20 @@ namespace WebStore9.Services.Services.InMemory
                 result.BrandId = product.BrandId;
                 result.SectionId = product.SectionId;
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task<int> AddBrandAsync(Brand brand)
+        public int AddBrand(Brand brand)
         {
             TestData.Brands = TestData.Brands.Concat([brand]);
 
-            return Task.FromResult(brand.Id);
+            return brand.Id;
         }
 
-        public Task<int> AddSectionAsync(Section section)
+        public int AddSection(Section section)
         {
             TestData.Sections = TestData.Sections.Concat([section]);
 
-            return Task.FromResult(section.Id);
+            return section.Id;
         }
     }
 }

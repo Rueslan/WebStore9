@@ -11,7 +11,7 @@ namespace WebStore9.Controllers
 
         public CartController(ICartService сartService) => _сartService = сartService;
 
-        public async Task<IActionResult> Index() => View(new CartOrderViewModel{Cart = await _сartService.GetViewModelAsync()});
+        public IActionResult Index() => View(new CartOrderViewModel{Cart = _сartService.GetViewModel()});
 
         public IActionResult Add(int Id)
         {
@@ -33,18 +33,18 @@ namespace WebStore9.Controllers
 
         [Authorize]
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> CheckOut(OrderViewModel orderViewModel, [FromServices] IOrderService orderService)
+        public IActionResult CheckOut(OrderViewModel orderViewModel, [FromServices] IOrderService orderService)
         {
             if (!ModelState.IsValid)
                 return View(nameof(Index), new CartOrderViewModel
                 {
-                    Cart = await _сartService.GetViewModelAsync(),
+                    Cart = _сartService.GetViewModel(),
                     Order = orderViewModel,
                 });
 
-            var order = await orderService.CreateOrder(
+            var order = orderService.CreateOrder(
                 User.Identity!.Name,
-                await _сartService.GetViewModelAsync(),
+                _сartService.GetViewModel(),
                 orderViewModel);
 
             _сartService.Clear();

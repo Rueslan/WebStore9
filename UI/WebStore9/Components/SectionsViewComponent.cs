@@ -6,16 +6,13 @@ namespace WebStore9.Components
 {
     public class SectionsViewComponent : ViewComponent
     {
-        private readonly IProductData _ProductData;
+        private readonly IProductData _productData;
 
-        public SectionsViewComponent(IProductData productData)
-        {
-            _ProductData = productData;
-        }
+        public SectionsViewComponent(IProductData productData) => _productData = productData;
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
-            var sections = await _ProductData.GetSectionsAsync();
+            var sections = _productData.GetSections();
 
             var parent_sections = sections.Where(s => s.ParentId is null);
 

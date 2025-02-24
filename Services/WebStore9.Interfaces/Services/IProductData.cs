@@ -5,30 +5,30 @@ namespace WebStore9.Interfaces.Services
 {
     public interface IProductData
     {
-        Task<IEnumerable<Section>> GetSectionsAsync();
+        IEnumerable<Section> GetSections();
 
-        Task<IEnumerable<Brand>> GetBrandsAsync();
+        IEnumerable<Brand> GetBrands();
 
-        Task<IEnumerable<Product>> GetProductsAsync(ProductFilter Filter = null);
+        IEnumerable<Product> GetProducts(ProductFilter Filter = null);
 
-        Task<Product> GetProductByIdAsync(int Id);
+        Product GetProductById(int Id);
 
-        Task<Brand> GetBrandByIdAsync(int Id);
+        Brand GetBrandById(int Id);
 
-        Task<Brand> GetBrandByNameAsync(string name);
+        Brand GetBrandByName(string name);
 
-        Task<Section> GetSectionByIdAsync(int Id);
+        Section GetSectionById(int Id);
 
-        Task<Section> GetSectionByNameAsync(string modelSectionName);
+        Section GetSectionByName(string modelSectionName);
 
-        Task DeleteProductByIdAsync(int Id);
+        bool DeleteProductById(int Id);
 
-        Task<int> AddProductAsync(Product product);
+        int AddProduct(Product product);
 
-        Task UpdateAsync(Product product);
+        void Update(Product product);
 
-        Task<int> AddBrandAsync(Brand brand);
+        int AddBrand(Brand brand);
 
-        Task<int> AddSectionAsync(Section section);
+        int AddSection(Section section);
     }
 }
