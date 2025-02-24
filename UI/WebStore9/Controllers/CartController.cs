@@ -7,30 +7,27 @@ namespace WebStore9.Controllers
 {
     public class CartController : Controller
     {
-        private readonly ICartService _CartService;
+        private readonly ICartService _сartService;
 
-        public CartController(ICartService CartService)
-        {
-            _CartService = CartService;
-        }
+        public CartController(ICartService сartService) => _сartService = сartService;
 
-        public async Task<IActionResult> Index() => View(new CartOrderViewModel{Cart = await _CartService.GetViewModelAsync()});
+        public async Task<IActionResult> Index() => View(new CartOrderViewModel{Cart = await _сartService.GetViewModelAsync()});
 
         public IActionResult Add(int Id)
         {
-            _CartService.Add(Id);
+            _сartService.Add(Id);
             return RedirectToAction("Index", "Cart");
         }
 
         public IActionResult Decrement(int Id)
         {
-            _CartService.Decrement(Id);
+            _сartService.Decrement(Id);
             return RedirectToAction("Index", "Cart");
         }
 
         public IActionResult Remove(int Id)
         {
-            _CartService.Remove(Id);
+            _сartService.Remove(Id);
             return RedirectToAction("Index", "Cart");
         }
 
@@ -41,16 +38,16 @@ namespace WebStore9.Controllers
             if (!ModelState.IsValid)
                 return View(nameof(Index), new CartOrderViewModel
                 {
-                    Cart = await _CartService.GetViewModelAsync(),
+                    Cart = await _сartService.GetViewModelAsync(),
                     Order = orderViewModel,
                 });
 
             var order = await orderService.CreateOrder(
                 User.Identity!.Name,
-                await _CartService.GetViewModelAsync(),
+                await _сartService.GetViewModelAsync(),
                 orderViewModel);
 
-            _CartService.Clear();
+            _сartService.Clear();
 
             return RedirectToAction(nameof(OrderConfirmed), new { order.Id });
         }

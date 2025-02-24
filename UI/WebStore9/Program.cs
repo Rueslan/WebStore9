@@ -5,11 +5,13 @@ using WebStore9.DAL.Context;
 using WebStore9.Infrastructure.Conventions;
 using WebStore9.Infrastructure.Middleware;
 using WebStore9.Interfaces.Services;
+using WebStore9.Interfaces.TestAPI;
 using WebStore9.Services.Data;
 using WebStore9.Services.Services.InCookies;
 using WebStore9.Services.Services.InMemory;
 using WebStore9.Services.Services.InSQL;
 using WebStore9Domain.Entities.Identity;
+using WebStore9.WebAPI.Clients.Values;
 
 namespace WebStore9
 {
@@ -90,7 +92,7 @@ namespace WebStore9
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddScoped<ICartService, InCookiesCartService>();
             builder.Services.AddScoped<IOrderService, SqlOrderService>();
-
+            builder.Services.AddHttpClient<IValuesService, ValuesClient>(client => client.BaseAddress = new(builder.Configuration["WebAPI"]));
 
             builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
