@@ -21,31 +21,6 @@ namespace WebStore9
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var databasetype = builder.Configuration["Database"];
-
-            switch (databasetype)
-            {
-                default: throw new InvalidOperationException($"Тип БД {databasetype} не поддерживается");
-
-                case "SqlServer": builder.Services.AddDbContext<WebStore9DB>(opt => 
-                        opt.UseSqlServer(builder.Configuration.GetConnectionString(databasetype)));
-                    break;
-
-                case "Sqlite":
-                    SQLitePCL.Batteries.Init();
-                    builder.Services.AddDbContext<WebStore9DB>(opt =>
-                        opt.UseSqlite(builder.Configuration.GetConnectionString(databasetype),
-                            o=> o.MigrationsAssembly("WebStore9.DAL.Sqlite")));
-                    break;
-
-                case "InMemory":
-                    builder.Services.AddDbContext<WebStore9DB>(opt =>
-                        opt.UseInMemoryDatabase("WebStore9.db"));
-                    break;
-            }
-
-            
-
             builder.Services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<WebStore9DB>()
                 .AddDefaultTokenProviders();

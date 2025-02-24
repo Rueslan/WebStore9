@@ -8,7 +8,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.2" />
+    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\WebStore9.DAL.Sqlite\WebStore9.DAL.Sqlite.csproj" />
+    <ProjectReference Include="..\..\Data\WebStore9.DAL\WebStore9.DAL.csproj" />
+    <ProjectReference Include="..\WebStore9.Interfaces\WebStore9.Interfaces.csproj" />
+    <ProjectReference Include="..\WebStore9.Services\WebStore9.Services.csproj" />
   </ItemGroup>
 
 </Project>
