@@ -1,6 +1,12 @@
-
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using WebStore9.DAL.Context;
+using WebStore9.Interfaces.Services;
+using WebStore9.Services.Services.InCookies;
+using WebStore9.Services.Services.InMemory;
+using WebStore9.Services.Services.InSQL;
+using WebStore9Domain.Entities.Identity;
 
 namespace WebStore9.WebAPI
 {
@@ -9,6 +15,30 @@ namespace WebStore9.WebAPI
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<WebStore9DB>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.Configure<IdentityOptions>(opt =>
+            {
+#if DEBUG
+
+
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequiredLength = 3;
+                opt.Password.RequiredUniqueChars = 3;
+#endif
+                opt.User.RequireUniqueEmail = false;
+                opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+                opt.Lockout.AllowedForNewUsers = false;
+                opt.Lockout.MaxFailedAccessAttempts = 10;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            });
 
             var databasetype = builder.Configuration["Database"];
 
@@ -34,8 +64,15 @@ namespace WebStore9.WebAPI
                     break;
             }
 
+            builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+            builder.Services.AddScoped<IProductData, SqlProductData>();
+            builder.Services.AddScoped<ICartService, InCookiesCartService>();
+            builder.Services.AddScoped<IOrderService, SqlOrderService>();
+
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
