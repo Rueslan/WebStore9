@@ -10,6 +10,7 @@ using WebStore9.Services.Data;
 using WebStore9.Services.Services.InCookies;
 using WebStore9.Services.Services.InMemory;
 using WebStore9.Services.Services.InSQL;
+using WebStore9.WebAPI.Clients.Employees;
 using WebStore9Domain.Entities.Identity;
 using WebStore9.WebAPI.Clients.Values;
 
@@ -20,6 +21,30 @@ namespace WebStore9
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            var databasetype = builder.Configuration["Database"];
+
+            switch (databasetype)
+            {
+                default: throw new InvalidOperationException($"Тип БД {databasetype} не поддерживается");
+
+                case "SqlServer":
+                    builder.Services.AddDbContext<WebStore9DB>(opt =>
+                        opt.UseSqlServer(builder.Configuration.GetConnectionString(databasetype)));
+                    break;
+
+                case "Sqlite":
+                    SQLitePCL.Batteries.Init();
+                    builder.Services.AddDbContext<WebStore9DB>(opt =>
+                        opt.UseSqlite(builder.Configuration.GetConnectionString(databasetype),
+                            o => o.MigrationsAssembly("WebStore9.DAL.Sqlite")));
+                    break;
+
+                case "InMemory":
+                    builder.Services.AddDbContext<WebStore9DB>(opt =>
+                        opt.UseInMemoryDatabase("WebStore9.db"));
+                    break;
+            }
 
             builder.Services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<WebStore9DB>()
@@ -61,13 +86,16 @@ namespace WebStore9
 
             builder.Services.AddTransient<WebStore9DBInitializer>();
 
-            builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
+            //builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             //builder.Services.AddSingleton<IProductData, InMemoryProductData>();
             builder.Services.AddScoped<IProductData, SqlProductData>();
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddScoped<ICartService, InCookiesCartService>();
             builder.Services.AddScoped<IOrderService, SqlOrderService>();
-            builder.Services.AddHttpClient<IValuesService, ValuesClient>(client => client.BaseAddress = new(builder.Configuration["WebAPI"]));
+            //builder.Services.AddHttpClient<IValuesService, ValuesClient>(client => client.BaseAddress = new(builder.Configuration["WebAPI"]));
+            builder.Services.AddHttpClient("WebStore9WabAPI", client => client.BaseAddress = new(builder.Configuration["WebAPI"]))
+                .AddTypedClient<IValuesService, ValuesClient>()
+                .AddTypedClient<IEmployeesData, EmployeesClient>();
 
             builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
