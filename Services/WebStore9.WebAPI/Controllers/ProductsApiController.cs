@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebStore9.Interfaces.Services;
 using WebStore9Domain;
+using WebStore9Domain.DTO;
 
 namespace WebStore9.WebAPI.Controllers
 {
@@ -16,14 +17,14 @@ namespace WebStore9.WebAPI.Controllers
         public IActionResult GetSections()
         {
             var sections = _productData.GetSections();
-            return Ok(sections);
+            return Ok(sections.ToDTO());
         }
 
         [HttpGet("sections/{id:int}")]
         public IActionResult GetSectionById(int id)
         {
             var section = _productData.GetSectionById(id);
-            return Ok(section);
+            return Ok(section.ToDTO());
         }
 
         [HttpGet("sections/{name}")]
@@ -31,14 +32,14 @@ namespace WebStore9.WebAPI.Controllers
         {
             var section = _productData.GetSectionByName(name);
 
-            return section is null ? NotFound() : Ok(section);
+            return section is null ? NotFound() : Ok(section.ToDTO());
         }
 
         [HttpGet("brands")]
         public IActionResult GetBrands()
         {
             var brands = _productData.GetBrands();
-            return Ok(brands);
+            return Ok(brands.ToDTO());
         }
 
         [HttpGet("brands/{id:int}")]
@@ -46,7 +47,7 @@ namespace WebStore9.WebAPI.Controllers
         {
             var brand = _productData.GetBrandById(id);
 
-            return brand is null ? NotFound() : Ok(brand);
+            return brand is null ? NotFound() : Ok(brand.ToDTO());
         }
 
         [HttpGet("brands/{name}")]
@@ -54,21 +55,21 @@ namespace WebStore9.WebAPI.Controllers
         {
             var brand = _productData.GetBrandByName(name);
 
-            return brand is null ? NotFound() : Ok(brand);
+            return brand is null ? NotFound() : Ok(brand.ToDTO());
         }
 
         [HttpPost] //cuz complicated object
         public IActionResult GetProducts([FromBody] ProductFilter filter = null)
         {
             var products = _productData.GetProducts(filter);
-            return Ok(products);
+            return Ok(products.ToDTO());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetProduct(int id)
         {
             var product = _productData.GetProductById(id);
-            return product is null ? NotFound() : Ok(product);
+            return product is null ? NotFound() : Ok(product.ToDTO());
         }
 
     }
