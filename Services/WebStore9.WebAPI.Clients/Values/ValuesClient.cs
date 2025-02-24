@@ -15,7 +15,7 @@ namespace WebStore9.WebAPI.Clients.Values
 
         public IEnumerable<string> GetAll()
         {
-            var response = _httpClient.GetAsync(_address).Result;
+            var response = HttpClient.GetAsync(Address).Result;
             if (response.IsSuccessStatusCode)
                 return response.Content.ReadFromJsonAsync<IEnumerable<string>>().Result;
 
@@ -24,7 +24,7 @@ namespace WebStore9.WebAPI.Clients.Values
 
         public int Count()
         {
-            var response = _httpClient.GetAsync($"{_address}/count").Result;
+            var response = HttpClient.GetAsync($"{Address}/count").Result;
             if (response.IsSuccessStatusCode)
                 return response.Content.ReadFromJsonAsync<int>().Result;
 
@@ -33,7 +33,7 @@ namespace WebStore9.WebAPI.Clients.Values
 
         public string GetById(int id)
         {
-            var response = _httpClient.GetAsync($"{_address}/{id}").Result;
+            var response = HttpClient.GetAsync($"{Address}/{id}").Result;
             if (response.IsSuccessStatusCode)
                 return response.Content.ReadFromJsonAsync<string>().Result;
 
@@ -42,19 +42,19 @@ namespace WebStore9.WebAPI.Clients.Values
 
         public void Add(string value)
         {
-            var response = _httpClient.PostAsJsonAsync(_address, value).Result;
+            var response = HttpClient.PostAsJsonAsync(Address, value).Result;
             response.EnsureSuccessStatusCode();
         }
 
         public void Edit(int id, string value)
         {
-            var response = _httpClient.PutAsJsonAsync($"{_address}/{id}", value).Result;
+            var response = HttpClient.PutAsJsonAsync($"{Address}/{id}", value).Result;
             response.EnsureSuccessStatusCode();
         }
 
         public bool Delete(int id)
         {
-            var response = _httpClient.DeleteAsync($"{_address}/{id}").Result;
+            var response = HttpClient.DeleteAsync($"{Address}/{id}").Result;
             return response.IsSuccessStatusCode;
         }
     }
