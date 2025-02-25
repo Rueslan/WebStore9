@@ -2,6 +2,7 @@
 using WebStore9.Interfaces.Services;
 using WebStore9Domain;
 using WebStore9Domain.DTO;
+using WebStore9Domain.Entities;
 
 namespace WebStore9.WebAPI.Controllers
 {
@@ -70,6 +71,34 @@ namespace WebStore9.WebAPI.Controllers
         {
             var product = _productData.GetProductById(id);
             return product is null ? NotFound() : Ok(product.ToDTO());
+        }
+
+        [HttpPost("products/add")]
+        public IActionResult AddProduct(Product product)
+        {
+            var id = _productData.AddProduct(product);
+            return CreatedAtAction(nameof(GetProduct), new { id }, product);
+        }
+
+        [HttpPut]
+        public IActionResult UpdateProduct(Product product)
+        {
+            _productData.Update(product);
+            return Ok(product.ToDTO());
+        }
+
+        [HttpPost("brands/add")]
+        public IActionResult AddBrand(Brand brand)
+        {
+            var id = _productData.AddBrand(brand);
+            return CreatedAtAction(nameof(GetBrandById), new { id }, brand);
+        }
+
+        [HttpPost("sections/add")]
+        public IActionResult AddSection(Section section)
+        {
+            var id = _productData.AddSection(section);
+            return CreatedAtAction(nameof(GetSectionById), new { id }, section);
         }
 
     }
