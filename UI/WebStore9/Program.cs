@@ -11,6 +11,7 @@ using WebStore9.Services.Services.InCookies;
 using WebStore9.Services.Services.InMemory;
 using WebStore9.Services.Services.InSQL;
 using WebStore9.WebAPI.Clients.Employees;
+using WebStore9.WebAPI.Clients.Products;
 using WebStore9Domain.Entities.Identity;
 using WebStore9.WebAPI.Clients.Values;
 
@@ -88,14 +89,16 @@ namespace WebStore9
 
             //builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             //builder.Services.AddSingleton<IProductData, InMemoryProductData>();
-            builder.Services.AddScoped<IProductData, SqlProductData>();
+            //builder.Services.AddScoped<IProductData, SqlProductData>();
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddScoped<ICartService, InCookiesCartService>();
             builder.Services.AddScoped<IOrderService, SqlOrderService>();
             //builder.Services.AddHttpClient<IValuesService, ValuesClient>(client => client.BaseAddress = new(builder.Configuration["WebAPI"]));
+
             builder.Services.AddHttpClient("WebStore9WabAPI", client => client.BaseAddress = new(builder.Configuration["WebAPI"]))
                 .AddTypedClient<IValuesService, ValuesClient>()
-                .AddTypedClient<IEmployeesData, EmployeesClient>();
+                .AddTypedClient<IEmployeesData, EmployeesClient>()
+                .AddTypedClient<IProductData, ProductsClient>();
 
             builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
