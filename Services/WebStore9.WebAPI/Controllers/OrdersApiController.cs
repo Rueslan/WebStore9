@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebStore9.Interfaces.Services;
+using WebStore9Domain.DTO;
 using WebStore9Domain.Entities.Orders;
 
 namespace WebStore9.WebAPI.Controllers
@@ -20,7 +21,7 @@ namespace WebStore9.WebAPI.Controllers
         public async Task<IActionResult> GetUserOrders(string userName)
         {
             var orders = await _orderService.GetUserOrders(userName);
-            return Ok(orders); 
+            return Ok(orders.ToDTO()); 
         }
 
         [HttpGet("{id}")]
@@ -30,14 +31,14 @@ namespace WebStore9.WebAPI.Controllers
             if (order is null)
                 return NotFound();
 
-            return Ok(order);
+            return Ok(order.ToDTO());
         }
 
         [HttpPost("{userName}")]
-        public async Task<IActionResult> CreateOrder(string userName)
+        public async Task<IActionResult> CreateOrder(string userName, [FromBody] CreateOrderDTO orderModel)
         {
-            var order = await _orderService.CreateOrder(userName,);
-            return Ok(order);
+            var order = await _orderService.CreateOrder(userName, orderModel.items.ToCartView(), orderModel.order);
+            return Ok(order.ToDTO());
         }
 
     }
