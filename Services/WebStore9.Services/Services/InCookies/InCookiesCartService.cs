@@ -99,9 +99,9 @@ namespace WebStore9.Services.Services.InCookies
             Cart = cart;
         }
 
-        public async Task<CartViewModel> GetViewModelAsync()
+        public CartViewModel GetViewModel()
         {
-            var products = await _productData.GetProductsAsync(new()
+            var products = _productData.GetProducts(new()
             {
                 Ids = Cart.Items.Select(i => i.ProductId).ToArray()
             });

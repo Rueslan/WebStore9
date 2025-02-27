@@ -17,23 +17,23 @@ namespace WebStore9.Services.Services.InMemory
             _currentMaxId = TestData.Employees.Max(e => e.Id);
         }
 
-        public Task<int> Add(Employee employee)
+        public int Add(Employee employee)
         {
             if (employee == null) throw new ArgumentNullException(nameof(employee));
 
             if (TestData.Employees.Any(e => e.Id == employee.Id))
-                return Task.FromResult(employee.Id);
+                return employee.Id;
 
 
             employee.Id = ++_currentMaxId;
             TestData.Employees.Add(employee);
 
-            return Task.FromResult(employee.Id);
+            return employee.Id;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public bool Delete(int id)
         {
-            var db_employee = await GetByIdAsync(id);
+            var db_employee = GetById(id);
             if (db_employee is null)
                 return false;
 
@@ -42,15 +42,15 @@ namespace WebStore9.Services.Services.InMemory
             return true;
         }
 
-        public Task<IEnumerable<Employee>> GetAll() => Task.FromResult(TestData.Employees.AsEnumerable());
+        public IEnumerable<Employee> GetAll() => TestData.Employees.AsEnumerable();
 
-        public Task<Employee> GetByIdAsync(int id) => Task.FromResult(TestData.Employees.FirstOrDefault(e => e.Id == id));
+        public Employee? GetById(int id) => TestData.Employees.FirstOrDefault(e => e.Id == id);
 
-        public async Task UpdateAsync(Employee employee)
+        public void Update(Employee employee)
         {
             if (employee is null) throw new ArgumentNullException(nameof(employee));
 
-            var db_employee = await GetByIdAsync(employee.Id);
+            var db_employee = GetById(employee.Id);
             if (db_employee is null)
                 return;
 

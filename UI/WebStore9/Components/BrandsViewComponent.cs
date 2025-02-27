@@ -6,15 +6,15 @@ namespace WebStore9.Components
 {
     public class BrandsViewComponent : ViewComponent
     {
-        private readonly IProductData _ProductData;
+        private readonly IProductData _productData;
 
-        public BrandsViewComponent(IProductData ProductData) => _ProductData = ProductData;
+        public BrandsViewComponent(IProductData productData) => _productData = productData;
 
-        public async Task<IViewComponentResult> InvokeAsync() => View(await GetBrandsAsync());
+        public IViewComponentResult Invoke() => View(GetBrandsAsync());
 
-        private async Task<IEnumerable<BrandViewModel>> GetBrandsAsync()
+        private IEnumerable<BrandViewModel> GetBrandsAsync()
         {
-            var brands = await _ProductData.GetBrandsAsync();
+            var brands = _productData.GetBrands();
 
             return brands
                 .OrderBy(b => b.Order)

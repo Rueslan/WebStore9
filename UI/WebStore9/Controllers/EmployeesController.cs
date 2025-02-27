@@ -22,15 +22,15 @@ public class EmployeesController : Controller
     }
 
     [Route("~/employees/all")]
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-        return View(await _EmplyeesData.GetAll());
+        return View(_EmplyeesData.GetAll());
     }
 
     [Route("~/employees/info-{id}")]
-    public async Task<IActionResult> Details(int id)
+    public IActionResult Details(int id)
     {
-        var employee = await _EmplyeesData.GetByIdAsync(id);
+        var employee = _EmplyeesData.GetById(id);
 
         if (employee == null)
             return NotFound();
@@ -55,15 +55,15 @@ public class EmployeesController : Controller
     #region DeleteAsync
 
     [Authorize(Roles = Role.Administrators)]
-    public async Task<IActionResult> Delete(int id)
+    public IActionResult Delete(int id)
     {
         if (id < 0) return BadRequest();
 
-        var employee = await _EmplyeesData.GetByIdAsync(id);
+        var employee = _EmplyeesData.GetById(id);
         if (employee is null)
             return NotFound();
 
-        await _EmplyeesData.DeleteAsync(id);
+        _EmplyeesData.Delete(id);
 
         return View(new EmployeeViewModel
         {
@@ -80,7 +80,7 @@ public class EmployeesController : Controller
     [Authorize(Roles = Role.Administrators)]
     public IActionResult DeleteConfirmed(int id)
     {
-        _EmplyeesData.DeleteAsync(id);
+        _EmplyeesData.Delete(id);
 
         return RedirectToAction(nameof(Index));
     }
@@ -91,12 +91,12 @@ public class EmployeesController : Controller
     #region Edit
 
     [Authorize(Roles = Role.Administrators)]
-    public async Task<IActionResult> Edit(int? id)
+    public IActionResult Edit(int? id)
     {
         if (id == null)
             return View(new EmployeeViewModel());
 
-        var employee = await _EmplyeesData.GetByIdAsync((int)id);
+        var employee = _EmplyeesData.GetById((int)id);
 
         if (employee == null) return NotFound();
 
@@ -136,7 +136,7 @@ public class EmployeesController : Controller
         if (employee.Id == 0)
             _EmplyeesData.Add(employee);
         else
-            _EmplyeesData.UpdateAsync(employee);
+            _EmplyeesData.Update(employee);
 
         return RedirectToAction(nameof(Index));
     }

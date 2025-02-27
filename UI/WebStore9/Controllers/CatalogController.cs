@@ -8,33 +8,33 @@ namespace WebStore9.Controllers
 {
     public class CatalogController : Controller
     {
-        private readonly IProductData _ProductData;
+        private readonly IProductData _productData;
 
-        public CatalogController(IProductData ProductData) => _ProductData = ProductData;
+        public CatalogController(IProductData productData) => _productData = productData;
 
-        public async Task<IActionResult> Index(int? BrandId, int? SectionId)
+        public IActionResult Index(int? brandId, int? sectionId)
         {
             var Filter = new ProductFilter
             {
-                BrandId = BrandId,
-                SectionId = SectionId,
+                BrandId = brandId,
+                SectionId = sectionId,
             };
 
-            var products = await _ProductData.GetProductsAsync(Filter);
+            var products = _productData.GetProducts(Filter);
 
-            var view_model = new CatalogViewModel
+            var viewModel = new CatalogViewModel
             {
-                BrandId = BrandId,
-                SectionId = SectionId,
+                BrandId = brandId,
+                SectionId = sectionId,
                 Products = products.OrderBy(p => p.Order).ToView()  
             };
 
-            return View(view_model);
+            return View(viewModel);
         }
 
-        public async Task<IActionResult> Details(int Id)
+        public IActionResult Details(int Id)
         {
-            var product = await _ProductData.GetProductByIdAsync(Id);
+            var product = _productData.GetProductById(Id);
 
             if (product is null)
                 return NotFound();
