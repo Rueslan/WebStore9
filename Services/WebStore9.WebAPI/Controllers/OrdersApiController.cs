@@ -12,10 +12,7 @@ namespace WebStore9.WebAPI.Controllers
     {
         private readonly IOrderService _orderService;
 
-        public OrdersApiController(IOrderService orderService)
-        {
-            _orderService = orderService;
-        }
+        public OrdersApiController(IOrderService orderService) => _orderService = orderService;
 
         [HttpGet("user/{userName}")]
         public async Task<IActionResult> GetUserOrders(string userName)
@@ -37,7 +34,7 @@ namespace WebStore9.WebAPI.Controllers
         [HttpPost("{userName}")]
         public async Task<IActionResult> CreateOrder(string userName, [FromBody] CreateOrderDTO orderModel)
         {
-            var order = await _orderService.CreateOrder(userName, orderModel.items.ToCartView(), orderModel.order);
+            var order = await _orderService.CreateOrder(userName, orderModel.Items.ToCartView(), orderModel.Order);
             return Ok(order.ToDTO());
         }
 

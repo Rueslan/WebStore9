@@ -21,20 +21,20 @@ namespace WebStore9Domain.DTO
 
     public class OrderItemDTO
     {
-        public int id { get; set; }
+        public int Id { get; set; }
 
-        public int productId { get; set; }
+        public int ProductId { get; set; }
 
-        public decimal price { get; set; }
+        public decimal Price { get; set; }
 
-        public int quantity { get; set; }
+        public int Quantity { get; set; }
     }
 
     public class CreateOrderDTO
     {
-        public OrderViewModel order { get; set; }
+        public OrderViewModel Order { get; set; }
 
-        public IEnumerable<OrderItemDTO> items { get; set; }
+        public IEnumerable<OrderItemDTO> Items { get; set; }
     }
 
     public static class OrderDTOMapper
@@ -43,20 +43,20 @@ namespace WebStore9Domain.DTO
             ? null
             : new OrderItemDTO
             {
-                id = item.Id,
-                productId = item.Product.Id,
-                price = item.Price,
-                quantity = item.Quantity,
+                Id = item.Id,
+                ProductId = item.Product.Id,
+                Price = item.Price,
+                Quantity = item.Quantity,
             };
 
         public static OrderItem FromDTO(this OrderItemDTO itemDto) => itemDto is null
             ? null
             : new OrderItem
             {
-                Id = itemDto.id,
-                Product = new Product{ Id = itemDto.id },
-                Price = itemDto.price,
-                Quantity = itemDto.quantity,
+                Id = itemDto.Id,
+                Product = new Product{ Id = itemDto.Id },
+                Price = itemDto.Price,
+                Quantity = itemDto.Quantity,
             };
 
         public static OrderDTO ToDTO(this Order order) => order is null
@@ -90,14 +90,14 @@ namespace WebStore9Domain.DTO
         public static IEnumerable<OrderItemDTO> ToDTO(this CartViewModel cartViewModel) =>
             cartViewModel.Items.Select(p => new OrderItemDTO
             {
-                productId = p.Product.Id,
-                price = p.Product.Price,
-                quantity = p.Quantity,
+                ProductId = p.Product.Id,
+                Price = p.Product.Price,
+                Quantity = p.Quantity,
             });
 
         public static CartViewModel ToCartView(this IEnumerable<OrderItemDTO> items) => new()
         {
-            Items = items.Select(p => (new ProductViewModel{Id = p.id}, p.quantity))
+            Items = items.Select(p => (new ProductViewModel{Id = p.Id}, p.Quantity))
         };
     }
 }

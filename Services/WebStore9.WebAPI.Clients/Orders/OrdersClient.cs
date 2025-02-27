@@ -9,10 +9,7 @@ namespace WebStore9.WebAPI.Clients.Orders
 {
     public class OrdersClient : BaseClient, IOrderService
     {
-        public OrdersClient(HttpClient client) : base(client, "api/orders")
-        {
-        }
-
+        public OrdersClient(HttpClient client) : base(client, "api/orders") { }
 
         public async Task<IEnumerable<Order>> GetUserOrders(string user)
         {
@@ -30,8 +27,8 @@ namespace WebStore9.WebAPI.Clients.Orders
         {
             var model = new CreateOrderDTO
             {
-                items = cart.ToDTO(),
-                order = orderModel,
+                Items = cart.ToDTO(),
+                Order = orderModel,
             };
 
             var response = await PostAsync($"{Address}/{userName}", model).ConfigureAwait(false);
