@@ -12,6 +12,8 @@ namespace WebStore9Domain.DTO
 
         public decimal Price { get; set; }
 
+        public string ImageUrl { get; set; }
+
         public BrandDTO Brand { get; set; }
 
         public SectionDTO Section { get; set; }
@@ -101,6 +103,7 @@ namespace WebStore9Domain.DTO
                 Price = product.Price,
                 Brand = product.Brand.ToDTO(),
                 Section = product.Section.ToDTO(),
+                ImageUrl = product.ImageUrl,
             };
 
         public static Product FromDTO(this ProductDTO productDto) => productDto is null
@@ -111,10 +114,11 @@ namespace WebStore9Domain.DTO
                 Name = productDto.Name,
                 Order = productDto.Order,
                 Price = productDto.Price,
-                BrandId = productDto.Brand.Id,
+                BrandId = productDto.Brand?.Id,
                 Brand = productDto.Brand.FromDTO(),
                 SectionId = productDto.Section.Id,
                 Section = productDto.Section.FromDTO(),
+                ImageUrl = productDto.ImageUrl,
             };
 
         public static IEnumerable<Product> FromDTO(this IEnumerable<ProductDTO> productsDTO) => productsDTO.Select(FromDTO);
