@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using WebStore9.Interfaces;
 using WebStore9.Interfaces.Services;
 using WebStore9.WebAPI.Clients.Base;
 using WebStore9Domain.Entities;
@@ -7,7 +8,7 @@ namespace WebStore9.WebAPI.Clients.Employees
 {
     public class EmployeesClient : BaseClient, IEmployeesData
     {
-        public EmployeesClient(HttpClient client) : base(client, "api/employees") { }
+        public EmployeesClient(HttpClient client) : base(client, WebAPIAddresses.Employees) { }
 
         public IEnumerable<Employee> GetAll()
         {

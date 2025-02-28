@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebStore9.Interfaces;
 using WebStore9.Interfaces.Services;
 using WebStore9Domain;
 using WebStore9Domain.DTO;
@@ -6,7 +7,7 @@ using WebStore9Domain.Entities;
 
 namespace WebStore9.WebAPI.Controllers
 {
-    [Route("api/products")]
+    [Route(WebAPIAddresses.Products)]
     [ApiController]
     public class ProductsApiController : ControllerBase
     {

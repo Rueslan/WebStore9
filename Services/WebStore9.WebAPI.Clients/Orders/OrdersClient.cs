@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using WebStore9.Interfaces;
 using WebStore9.Interfaces.Services;
 using WebStore9.WebAPI.Clients.Base;
 using WebStore9Domain.DTO;
@@ -9,7 +10,7 @@ namespace WebStore9.WebAPI.Clients.Orders
 {
     public class OrdersClient : BaseClient, IOrderService
     {
-        public OrdersClient(HttpClient client) : base(client, "api/orders") { }
+        public OrdersClient(HttpClient client) : base(client, WebAPIAddresses.Orders) { }
 
         public async Task<IEnumerable<Order>> GetUserOrders(string user)
         {
