@@ -11,6 +11,7 @@ using WebStore9.Services.Services.InCookies;
 using WebStore9.Services.Services.InMemory;
 using WebStore9.Services.Services.InSQL;
 using WebStore9.WebAPI.Clients.Employees;
+using WebStore9.WebAPI.Clients.Identity;
 using WebStore9.WebAPI.Clients.Orders;
 using WebStore9.WebAPI.Clients.Products;
 using WebStore9Domain.Entities.Identity;
@@ -49,8 +50,20 @@ namespace WebStore9
             }
 
             builder.Services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<WebStore9DB>()
+                //.AddEntityFrameworkStores<WebStore9DB>()
                 .AddDefaultTokenProviders();
+
+            builder.Services.AddHttpClient("WebStore9WebAPIIdentity",
+                    client => client.BaseAddress = new(builder.Configuration["WebAPI"]))
+                .AddTypedClient<IUserStore<User>, UsersClient>()
+                .AddTypedClient<IUserPasswordStore<User>, UsersClient>()
+                .AddTypedClient<IUserEmailStore<User>, UsersClient>()
+                .AddTypedClient<IUserPhoneNumberStore<User>, UsersClient>()
+                .AddTypedClient<IUserTwoFactorStore<User>, UsersClient>()
+                .AddTypedClient<IUserClaimStore<User>, UsersClient>()
+                .AddTypedClient<IUserLoginStore<User>, UsersClient>()
+                .AddTypedClient<IRoleStore<Role>, RolesClient>()
+                ;
 
             builder.Services.Configure<IdentityOptions>(opt =>
             {
