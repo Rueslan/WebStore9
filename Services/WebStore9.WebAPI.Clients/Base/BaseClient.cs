@@ -2,7 +2,7 @@
 
 namespace WebStore9.WebAPI.Clients.Base
 {
-    public abstract class BaseClient
+    public abstract class BaseClient : IDisposable
     {
         protected HttpClient HttpClient { get; }
 
@@ -49,5 +49,22 @@ namespace WebStore9.WebAPI.Clients.Base
             return response;
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        private bool _disposed;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            _disposed = true;
+
+            if (disposing)
+            {
+                
+            }
+        }
     }
 }
