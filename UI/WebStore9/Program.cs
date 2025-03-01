@@ -67,13 +67,8 @@ namespace WebStore9
                 opt.SlidingExpiration = true;
             });
             
-            //builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
-            //builder.Services.AddSingleton<IProductData, InMemoryProductData>();
-            //builder.Services.AddScoped<IProductData, SqlProductData>();
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddScoped<ICartService, InCookiesCartService>();
-            //builder.Services.AddScoped<IOrderService, SqlOrderService>();
-            //builder.Services.AddHttpClient<IValuesService, ValuesClient>(client => client.BaseAddress = new(builder.Configuration["WebAPI"]));
 
             builder.Services.AddHttpClient("WebStore9WabAPI", client => client.BaseAddress = new(builder.Configuration["WebAPI"]))
                 .AddTypedClient<IValuesService, ValuesClient>()
