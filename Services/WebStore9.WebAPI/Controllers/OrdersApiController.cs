@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebStore9.Interfaces;
 using WebStore9.Interfaces.Services;
 using WebStore9Domain.DTO;
 using WebStore9Domain.Entities.Orders;
 
 namespace WebStore9.WebAPI.Controllers
 {
-    [Route("api/orders")]
+    [Route(WebAPIAddresses.Orders)]
     [ApiController]
     public class OrdersApiController : ControllerBase
     {

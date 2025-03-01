@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc;
+using WebStore9.Interfaces;
 using WebStore9.Interfaces.TestAPI;
 using WebStore9.WebAPI.Clients.Base;
 
@@ -8,7 +9,7 @@ namespace WebStore9.WebAPI.Clients.Values
     public class ValuesClient : BaseClient, IValuesService
     {
 
-        public ValuesClient(HttpClient client) : base(client,"api/values")
+        public ValuesClient(HttpClient client) : base(client, WebAPIAddresses.Values)
         {
             
         }

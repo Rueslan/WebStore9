@@ -48,8 +48,6 @@ namespace WebStore9.WebAPI
             builder.Services.Configure<IdentityOptions>(opt =>
             {
 #if DEBUG
-
-
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireLowercase = false;
                 opt.Password.RequireUppercase = false;
@@ -65,7 +63,7 @@ namespace WebStore9.WebAPI
                 opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             });
 
-            builder.Services.AddTransient<WebStore9DBInitializer>();
+            builder.Services.AddScoped<WebStore9DBInitializer>();
 
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -77,9 +75,30 @@ namespace WebStore9.WebAPI
             builder.Services.AddControllers();
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                const string webstore_api_xml = "WebStore9.WebAPI.xml";
+                const string webstore_domain_xml = "WebStore9.Domain.xml";
+                const string debug_path = "bin/debug/net8.0";
+
+                if (File.Exists(webstore_api_xml))
+                    c.IncludeXmlComments(webstore_api_xml);
+                else if (File.Exists(Path.Combine(debug_path, webstore_api_xml)))
+                    c.IncludeXmlComments(Path.Combine(debug_path, webstore_api_xml));
+
+                if (File.Exists(webstore_domain_xml))
+                    c.IncludeXmlComments(webstore_domain_xml);
+                else if (File.Exists(Path.Combine(debug_path, webstore_domain_xml)))
+                    c.IncludeXmlComments(Path.Combine(debug_path, webstore_domain_xml));
+            });
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var initializer = scope.ServiceProvider.GetRequiredService<WebStore9DBInitializer>();
+                await initializer.InitializeAsync();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

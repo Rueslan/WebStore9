@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using WebStore9.Interfaces;
 using WebStore9.Interfaces.Services;
 using WebStore9.WebAPI.Clients.Base;
 using WebStore9Domain;
@@ -9,7 +10,7 @@ namespace WebStore9.WebAPI.Clients.Products
 {
     public class ProductsClient : BaseClient, IProductData
     {
-        public ProductsClient(HttpClient client) : base(client, "api/products") { }
+        public ProductsClient(HttpClient client) : base(client, WebAPIAddresses.Products) { }
 
         public IEnumerable<Section> GetSections()
         {
