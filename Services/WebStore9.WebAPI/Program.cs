@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using WebStore9.DAL.Context;
 using WebStore9.Interfaces.Services;
+using WebStore9.Logger;
 using WebStore9.Services.Data;
 using WebStore9.Services.Services.InCookies;
 using WebStore9.Services.Services.InMemory;
@@ -93,6 +94,8 @@ namespace WebStore9.WebAPI
             });
 
             var app = builder.Build();
+
+            app.Services.GetRequiredService<ILoggerFactory>().AddLog4Net();
 
             using (var scope = app.Services.CreateScope())
             {

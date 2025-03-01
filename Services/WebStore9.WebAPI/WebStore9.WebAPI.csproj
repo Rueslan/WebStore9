@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\WebStore9.Logger\WebStore9.Logger.csproj" />
     <ProjectReference Include="..\..\Data\WebStore9.DAL.Sqlite\WebStore9.DAL.Sqlite.csproj" />
     <ProjectReference Include="..\..\Data\WebStore9.DAL\WebStore9.DAL.csproj" />
     <ProjectReference Include="..\WebStore9.Interfaces\WebStore9.Interfaces.csproj" />

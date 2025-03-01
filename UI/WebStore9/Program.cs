@@ -4,6 +4,7 @@ using WebStore9.Infrastructure.Conventions;
 using WebStore9.Infrastructure.Middleware;
 using WebStore9.Interfaces.Services;
 using WebStore9.Interfaces.TestAPI;
+using WebStore9.Logger;
 using WebStore9.Services.Services.InCookies;
 using WebStore9.WebAPI.Clients.Employees;
 using WebStore9.WebAPI.Clients.Identity;
@@ -75,6 +76,8 @@ namespace WebStore9
             //);
 
             var app = builder.Build();
+
+            app.Services.GetRequiredService<ILoggerFactory>().AddLog4Net();
 
             app.UseStatusCodePagesWithRedirects("~/Home/Status/{0}");
 
