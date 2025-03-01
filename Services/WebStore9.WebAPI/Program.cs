@@ -75,7 +75,22 @@ namespace WebStore9.WebAPI
             builder.Services.AddControllers();
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                const string webstore_api_xml = "WebStore9.WebAPI.xml";
+                const string webstore_domain_xml = "WebStore9.Domain.xml";
+                const string debug_path = "bin/debug/net8.0";
+
+                if (File.Exists(webstore_api_xml))
+                    c.IncludeXmlComments(webstore_api_xml);
+                else if (File.Exists(Path.Combine(debug_path, webstore_api_xml)))
+                    c.IncludeXmlComments(Path.Combine(debug_path, webstore_api_xml));
+
+                if (File.Exists(webstore_domain_xml))
+                    c.IncludeXmlComments(webstore_domain_xml);
+                else if (File.Exists(Path.Combine(debug_path, webstore_domain_xml)))
+                    c.IncludeXmlComments(Path.Combine(debug_path, webstore_domain_xml));
+            });
 
             var app = builder.Build();
 
