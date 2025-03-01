@@ -215,7 +215,6 @@ namespace WebStore9.WebAPI.Clients.Identity
         {
             return await (await PostAsync($"{Address}/User/GetNormalizedEmail", user, cancellationToken))
                 .EnsureSuccessStatusCode()
-
                 .Content
                .ReadAsStringAsync(cancellationToken)
                .ConfigureAwait(false);
@@ -223,6 +222,8 @@ namespace WebStore9.WebAPI.Clients.Identity
 
         public async Task SetNormalizedEmailAsync(User user, string email, CancellationToken cancellationToken)
         {
+            if (email == string.Empty) return;
+
             user.NormalizedEmail = email;
             await PostAsync($"{Address}/SetNormalizedEmail/{email}", user, cancellationToken).ConfigureAwait(false);
         }
@@ -404,7 +405,6 @@ namespace WebStore9.WebAPI.Clients.Identity
         public async Task<IList<User>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
         {
             return await (await PostAsync($"{Address}/GetUsersForClaim", claim, cancellationToken))
-                .EnsureSuccessStatusCode()
                 .EnsureSuccessStatusCode()
                 .Content
                .ReadFromJsonAsync<List<User>>(cancellationToken)

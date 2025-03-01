@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
 
 namespace WebStore9.WebAPI.Clients.Base
 {
@@ -18,6 +19,7 @@ namespace WebStore9.WebAPI.Clients.Base
         protected async Task<T> GetAsync<T>(string url, CancellationToken cancellationToken = default)
         {
             var response = await HttpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
+            if (response.StatusCode == HttpStatusCode.NoContent) return default;
             return await response
                 .EnsureSuccessStatusCode()
                 .Content
