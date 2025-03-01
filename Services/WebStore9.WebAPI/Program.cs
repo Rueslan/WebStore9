@@ -48,8 +48,6 @@ namespace WebStore9.WebAPI
             builder.Services.Configure<IdentityOptions>(opt =>
             {
 #if DEBUG
-
-
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireLowercase = false;
                 opt.Password.RequireUppercase = false;
@@ -65,7 +63,7 @@ namespace WebStore9.WebAPI
                 opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             });
 
-            builder.Services.AddTransient<WebStore9DBInitializer>();
+            builder.Services.AddScoped<WebStore9DBInitializer>();
 
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -80,6 +78,12 @@ namespace WebStore9.WebAPI
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var initializer = scope.ServiceProvider.GetRequiredService<WebStore9DBInitializer>();
+                await initializer.InitializeAsync();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
