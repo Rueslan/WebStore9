@@ -21,6 +21,7 @@ namespace WebStore9
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddIdentity<User, Role>()
+                .AddIdentityWebStoreWebAPIClients()
                 .AddDefaultTokenProviders();
 
             builder.Services.AddIdentityWebStoreWebAPIClients();
