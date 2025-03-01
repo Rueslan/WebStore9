@@ -68,6 +68,12 @@ namespace WebStore9
             builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
 
+            //builder.Host.ConfigureLogging((host, log) => log
+            //    .ClearProviders()
+            //    .AddConsole(c => c.IncludeScopes = true)
+            //    .AddFilter("Microsoft", LogLevel.Warning)
+            //);
+
             var app = builder.Build();
 
             app.UseStatusCodePagesWithRedirects("~/Home/Status/{0}");
