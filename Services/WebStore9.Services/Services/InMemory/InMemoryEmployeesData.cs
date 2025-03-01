@@ -7,13 +7,13 @@ namespace WebStore9.Services.Services.InMemory
 {
     public class InMemoryEmployeesData : IEmployeesData
     {
-        private readonly ILogger<InMemoryEmployeesData> _Logger;
+        private readonly ILogger<InMemoryEmployeesData> _logger;
 
         private int _currentMaxId;
 
-        public InMemoryEmployeesData(ILogger<InMemoryEmployeesData> Logger)
+        public InMemoryEmployeesData(ILogger<InMemoryEmployeesData> logger)
         {
-            _Logger = Logger;
+            _logger = logger;
             _currentMaxId = TestData.Employees.Max(e => e.Id);
         }
 
@@ -28,6 +28,8 @@ namespace WebStore9.Services.Services.InMemory
             employee.Id = ++_currentMaxId;
             TestData.Employees.Add(employee);
 
+            _logger.LogInformation("Сотрудник {0} успешно добавлен",employee);
+
             return employee.Id;
         }
 
@@ -35,9 +37,14 @@ namespace WebStore9.Services.Services.InMemory
         {
             var db_employee = GetById(id);
             if (db_employee is null)
+            {
+                _logger.LogWarning("В процессе попытки удаления сотрудник с id:{0} не найден", id);
                 return false;
+            }
 
             TestData.Employees.Remove(db_employee);
+
+            _logger.LogInformation("Сотрудник {0} успешно удалён", db_employee);
 
             return true;
         }
@@ -59,6 +66,8 @@ namespace WebStore9.Services.Services.InMemory
             db_employee.Patronymic = employee.Patronymic;
             db_employee.Age = employee.Age;
             db_employee.Seniority = employee.Seniority;
+
+            _logger.LogInformation("Сотрудник {0} успешно обновлён", employee);
         }
     }
 }
