@@ -5,6 +5,9 @@ using WebStore9Domain.Entities;
 
 namespace WebStore9.WebAPI.Controllers
 {
+    /// <summary>
+    /// Управление сотрудниками
+    /// </summary>
     [Route(WebAPIAddresses.Employees)]
     [ApiController]
     public class EmployeesApiController : ControllerBase
@@ -13,6 +16,10 @@ namespace WebStore9.WebAPI.Controllers
 
         public EmployeesApiController(IEmployeesData employeesData) => _employeesData = employeesData;
 
+        /// <summary>
+        /// Получение всех сотрудников
+        /// </summary>
+        /// <returns>Список сотрудников</returns>
         [HttpGet]
         public IActionResult Get()
         {
@@ -21,7 +28,14 @@ namespace WebStore9.WebAPI.Controllers
             return Ok(employees);
         }
 
+        /// <summary>
+        /// Получение сотрудника по идетификатору
+        /// </summary>
+        /// <param name="id">Идентификатор сотрудника</param>
+        /// <returns>Сотрудник с указанным идентификатором</returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Employee))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetById(int id)
         {
             var employee = _employeesData.GetById(id);
