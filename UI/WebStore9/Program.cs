@@ -23,17 +23,7 @@ namespace WebStore9
             builder.Services.AddIdentity<User, Role>()
                 .AddDefaultTokenProviders();
 
-            builder.Services.AddHttpClient("WebStore9WebAPIIdentity",
-                    client => client.BaseAddress = new(builder.Configuration["WebAPI"]))
-                .AddTypedClient<IUserStore<User>, UsersClient>()
-                .AddTypedClient<IUserPasswordStore<User>, UsersClient>()
-                .AddTypedClient<IUserEmailStore<User>, UsersClient>()
-                .AddTypedClient<IUserPhoneNumberStore<User>, UsersClient>()
-                .AddTypedClient<IUserTwoFactorStore<User>, UsersClient>()
-                .AddTypedClient<IUserClaimStore<User>, UsersClient>()
-                .AddTypedClient<IUserLoginStore<User>, UsersClient>()
-                .AddTypedClient<IRoleStore<Role>, RolesClient>()
-                ;
+            builder.Services.AddIdentityWebStoreWebAPIClients();
 
             builder.Services.Configure<IdentityOptions>(opt =>
             {
