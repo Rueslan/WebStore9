@@ -25,6 +25,8 @@ namespace WebStore9.Services.Services.InSQL
 
         public async Task<IEnumerable<Order>> GetUserOrders(string userName)
         {
+            _logger.LogInformation("Получение заказов пользователя {0}", userName);
+
             var orders = await _db.Orders
                 .Include(o => o.User)
                 .Include(o => o.Items)
@@ -38,6 +40,8 @@ namespace WebStore9.Services.Services.InSQL
 
         public async Task<Order> GetOrderById(int id)
         {
+            _logger.LogInformation("Получение заказа по id {0}", id);
+
             var order = await _db.Orders
                 .Include(o => o.User)
                 .Include(o => o.Items)
