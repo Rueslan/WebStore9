@@ -24,5 +24,7 @@ namespace WebStore9Domain.Entities
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
+
+        public override string ToString() => $"Название {Name}, секция {Section}, бренд {Brand}, цена {Price}, адрес картинки {ImageUrl}";
     }
 }

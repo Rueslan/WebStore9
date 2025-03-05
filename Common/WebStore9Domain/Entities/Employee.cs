@@ -20,5 +20,9 @@ namespace WebStore9Domain.Entities
         /// <summary> Опыт сотрудника </summary>
         public int Seniority { get; set; }
 
+        public override string ToString()
+        {
+            return $"[{Id}]{LastName} {FirstName} {Patronymic} ({Age}, {Seniority})";
+        }
     }
 }

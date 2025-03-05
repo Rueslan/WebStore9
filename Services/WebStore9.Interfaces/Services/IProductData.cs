@@ -9,19 +9,19 @@ namespace WebStore9.Interfaces.Services
 
         IEnumerable<Brand> GetBrands();
 
-        IEnumerable<Product> GetProducts(ProductFilter Filter = null);
+        IEnumerable<Product> GetProducts(ProductFilter filter = null);
 
-        Product GetProductById(int Id);
+        Product GetProductById(int id);
 
-        Brand GetBrandById(int Id);
+        Brand GetBrandById(int id);
 
         Brand GetBrandByName(string name);
 
-        Section GetSectionById(int Id);
+        Section GetSectionById(int id);
 
         Section GetSectionByName(string modelSectionName);
 
-        bool DeleteProductById(int Id);
+        bool DeleteProductById(int id);
 
         int AddProduct(Product product);
 

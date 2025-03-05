@@ -4,11 +4,11 @@ namespace WebStore9.Interfaces.Services
 {
     public interface ICartService
     {
-        void Add(int Id);
+        void Add(int id);
 
-        void Decrement(int Id);
+        void Decrement(int id);
 
-        void Remove(int Id);
+        void Remove(int id);
 
         void Clear();
 

@@ -1,16 +1,20 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Json;
 using WebStore9.Infrastructure.Conventions;
 using WebStore9.Infrastructure.Middleware;
 using WebStore9.Interfaces.Services;
 using WebStore9.Interfaces.TestAPI;
+using WebStore9.Logger;
 using WebStore9.Services.Services.InCookies;
 using WebStore9.WebAPI.Clients.Employees;
 using WebStore9.WebAPI.Clients.Identity;
 using WebStore9.WebAPI.Clients.Orders;
 using WebStore9.WebAPI.Clients.Products;
-using WebStore9Domain.Entities.Identity;
 using WebStore9.WebAPI.Clients.Values;
+using WebStore9Domain.Entities.Identity;
 
 namespace WebStore9
 {
@@ -55,11 +59,11 @@ namespace WebStore9
 
                 opt.SlidingExpiration = true;
             });
-            
+
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddScoped<ICartService, InCookiesCartService>();
 
-            builder.Services.AddHttpClient("WebStore9WabAPI", client => client.BaseAddress = new(builder.Configuration["WebAPI"]))
+            builder.Services.AddHttpClient("WebStore9WabAPI", client => client.BaseAddress = new(builder.Configuration["WebAPI"]!))
                 .AddTypedClient<IValuesService, ValuesClient>()
                 .AddTypedClient<IEmployeesData, EmployeesClient>()
                 .AddTypedClient<IProductData, ProductsClient>()
@@ -68,7 +72,24 @@ namespace WebStore9
             builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
 
+            //builder.Host.ConfigureLogging((host, log) => log
+            //    .ClearProviders()
+            //    .AddConsole(c => c.IncludeScopes = true)
+            //    .AddFilter("Microsoft", LogLevel.Warning)
+            //);
+            builder.Host.UseSerilog((host, log) => log.ReadFrom.Configuration(host.Configuration)
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .Enrich.FromLogContext()
+                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
+                .WriteTo.RollingFile($@".\Logs\WebStore9[{DateTime.Now:yyyy-MM-ddTHH-mm-ss}].log")
+                .WriteTo.File(new JsonFormatter(",",true), $@".\Logs\WebStore9[{DateTime.Now:yyyy-MM-ddTHH-mm-ss}].log.json")
+                .WriteTo.Seq("http://localhost:5341/")
+            );
+
             var app = builder.Build();
+
+            app.Services.GetRequiredService<ILoggerFactory>().AddLog4Net();
 
             app.UseStatusCodePagesWithRedirects("~/Home/Status/{0}");
 
@@ -82,6 +103,8 @@ namespace WebStore9
             app.UseMiddleware<TestMiddleware>();
 
             app.MapControllers();
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

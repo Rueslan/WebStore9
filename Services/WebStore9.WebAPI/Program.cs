@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using WebStore9.DAL.Context;
 using WebStore9.Interfaces.Services;
+using WebStore9.Logger;
 using WebStore9.Services.Data;
 using WebStore9.Services.Services.InCookies;
 using WebStore9.Services.Services.InMemory;
@@ -94,6 +96,8 @@ namespace WebStore9.WebAPI
 
             var app = builder.Build();
 
+            app.Services.GetRequiredService<ILoggerFactory>().AddLog4Net();
+
             using (var scope = app.Services.CreateScope())
             {
                 var initializer = scope.ServiceProvider.GetRequiredService<WebStore9DBInitializer>();
@@ -106,6 +110,8 @@ namespace WebStore9.WebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseRouting();
 

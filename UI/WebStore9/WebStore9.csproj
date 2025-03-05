@@ -12,10 +12,15 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.13" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.10" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\WebStore9.Logger\WebStore9.Logger.csproj" />
     <ProjectReference Include="..\..\Common\WebStore9Domain\WebStore9Domain.csproj" />
     <ProjectReference Include="..\..\Data\WebStore9.DAL.Sqlite\WebStore9.DAL.Sqlite.csproj" />
     <ProjectReference Include="..\..\Data\WebStore9.DAL\WebStore9.DAL.csproj" />
