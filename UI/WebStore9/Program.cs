@@ -63,7 +63,7 @@ namespace WebStore9
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddScoped<ICartService, InCookiesCartService>();
 
-            builder.Services.AddHttpClient("WebStore9WabAPI", client => client.BaseAddress = new(builder.Configuration["WebAPI"]))
+            builder.Services.AddHttpClient("WebStore9WabAPI", client => client.BaseAddress = new(builder.Configuration["WebAPI"]!))
                 .AddTypedClient<IValuesService, ValuesClient>()
                 .AddTypedClient<IEmployeesData, EmployeesClient>()
                 .AddTypedClient<IProductData, ProductsClient>()
