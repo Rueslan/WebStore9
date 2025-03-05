@@ -84,6 +84,7 @@ namespace WebStore9
                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
                 .WriteTo.RollingFile($@".\Logs\WebStore9[{DateTime.Now:yyyy-MM-ddTHH-mm-ss}].log")
                 .WriteTo.File(new JsonFormatter(",",true), $@".\Logs\WebStore9[{DateTime.Now:yyyy-MM-ddTHH-mm-ss}].log.json")
+                .WriteTo.Seq("http://localhost:5341/")
             );
 
             var app = builder.Build();
@@ -102,6 +103,8 @@ namespace WebStore9
             app.UseMiddleware<TestMiddleware>();
 
             app.MapControllers();
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

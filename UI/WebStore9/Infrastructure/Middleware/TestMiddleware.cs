@@ -2,18 +2,18 @@
 {
     public class TestMiddleware
     {
-        private readonly RequestDelegate _Next;
-        private readonly ILogger<TestMiddleware> _Logger;
+        private readonly RequestDelegate _next;
+        private readonly ILogger<TestMiddleware> _logger;
 
-        public TestMiddleware(RequestDelegate next, ILogger<TestMiddleware> Logger)
+        public TestMiddleware(RequestDelegate next, ILogger<TestMiddleware> logger)
         {
-            _Next = next;
-            _Logger = Logger;
+            _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var processing = _Next(context);
+            var processing = _next(context);
 
             await processing;
         }
