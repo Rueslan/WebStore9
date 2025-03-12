@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore9.Logger", "Common\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore9.Tests", "Tests\WebStore9.Tests\WebStore9.Tests.csproj", "{8EBB0B4D-E21E-435B-9914-BC3D3062C01D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore9.Services.Tests", "Tests\WebStore9.Services.Tests\WebStore9.Services.Tests.csproj", "{B0DBCB86-85CC-49ED-BEC4-A547EF484757}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{8EBB0B4D-E21E-435B-9914-BC3D3062C01D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EBB0B4D-E21E-435B-9914-BC3D3062C01D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EBB0B4D-E21E-435B-9914-BC3D3062C01D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0DBCB86-85CC-49ED-BEC4-A547EF484757}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0DBCB86-85CC-49ED-BEC4-A547EF484757}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0DBCB86-85CC-49ED-BEC4-A547EF484757}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0DBCB86-85CC-49ED-BEC4-A547EF484757}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,5 +107,6 @@ Global
 		{463922E4-FDF2-49BE-9D0A-B4D7189DF393} = {46B13138-EBA3-45CC-8FC6-1358EF226B25}
 		{9202AC4D-5264-48DB-9465-9E392622CF59} = {7F08C269-DBD6-42EE-AFCB-E594C185A748}
 		{8EBB0B4D-E21E-435B-9914-BC3D3062C01D} = {46B13138-EBA3-45CC-8FC6-1358EF226B25}
+		{B0DBCB86-85CC-49ED-BEC4-A547EF484757} = {46B13138-EBA3-45CC-8FC6-1358EF226B25}
 	EndGlobalSection
 EndGlobal
