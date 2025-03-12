@@ -24,6 +24,9 @@ namespace WebStore9.Controllers
 
         public IActionResult Status(string id)
         {
+            if (id is null)
+                throw new ArgumentNullException(nameof(id));
+
             switch (id)
             {
                 case "404": return View("Page404");
