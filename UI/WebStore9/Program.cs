@@ -8,6 +8,7 @@ using WebStore9.Infrastructure.Middleware;
 using WebStore9.Interfaces.Services;
 using WebStore9.Interfaces.TestAPI;
 using WebStore9.Logger;
+using WebStore9.Services.Services;
 using WebStore9.Services.Services.InCookies;
 using WebStore9.WebAPI.Clients.Employees;
 using WebStore9.WebAPI.Clients.Identity;
@@ -61,7 +62,8 @@ namespace WebStore9
             });
 
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            builder.Services.AddScoped<ICartService, InCookiesCartService>();
+            builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<ICartStore, InCookiesCartStore>();
 
             builder.Services.AddHttpClient("WebStore9WabAPI", client => client.BaseAddress = new(builder.Configuration["WebAPI"]!))
                 .AddTypedClient<IValuesService, ValuesClient>()
