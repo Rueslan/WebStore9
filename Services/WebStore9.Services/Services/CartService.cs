@@ -1,30 +1,22 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using WebStore9.Interfaces.Services;
 using WebStore9.Services.Mapping;
 using WebStore9Domain.Entities;
 using WebStore9Domain.ViewModels;
 
-namespace WebStore9.Services.Services.InCookies
+namespace WebStore9.Services.Services
 {
-    public class InCookiesCartService : ICartService
+    public class CartService : ICartService
     {
         private readonly ICartStore _cartStore;
         private readonly IProductData _productData;
-        private readonly ILogger<InCookiesCartService> _logger;
-        private readonly string _cartName;
+        private readonly ILogger<CartService> _logger;
 
-        public InCookiesCartService(ICartStore cartStore,IHttpContextAccessor httpContextAccessor, IProductData productData, ILogger<InCookiesCartService> logger)
+        public CartService(ICartStore cartStore, IProductData productData, ILogger<CartService> logger)
         {
             _cartStore = cartStore;
             _productData = productData;
             _logger = logger;
-
-            var user = httpContextAccessor.HttpContext!.User;
-            var user_name = user.Identity.IsAuthenticated ? $"-{user.Identity.Name}" : null;
-
-            _cartName = $"WebStore9.Cart{user_name}";
-            _logger.LogInformation("Создан куки для пользователя: {0} с именем корзины: {1}", user.Identity.Name, _cartName);
         }
 
         public void Add(int id)
@@ -34,12 +26,12 @@ namespace WebStore9.Services.Services.InCookies
             var item = cart.Items.FirstOrDefault(i => i.ProductId == id);
             if (item is null)
             {
-                _logger.LogInformation("Добавление товара с id {0} в корзину [{1}]", id, _cartName);
+                _logger.LogInformation("Добавление товара с id {0}", id);
                 cart.Items.Add(new CartItem { ProductId = id, Quantity = 1 });
             }
             else
             {
-                _logger.LogInformation("Увеличение количества товаров с id {0} в корзине [{1}]", id, _cartName);
+                _logger.LogInformation("Увеличение количества товаров с id {0}", id);
                 item.Quantity++;
             }
 
@@ -55,13 +47,13 @@ namespace WebStore9.Services.Services.InCookies
 
             if (item.Quantity > 0)
             {
-                _logger.LogInformation("Количество товаров с id {0} уменьшено до {1} в корзине [{2}]", id, item.Quantity, _cartName);
+                _logger.LogInformation("Количество товаров с id {0} уменьшено до {1}", id, item.Quantity);
                 item.Quantity--;
             }
 
             if (item.Quantity <= 0)
             {
-                _logger.LogInformation("Удаление товара с id {0} из корзины [{1}]", id, _cartName);
+                _logger.LogInformation("Удаление товара с id {0}", id);
                 cart.Items.Remove(item);
             }
 
@@ -75,7 +67,7 @@ namespace WebStore9.Services.Services.InCookies
             var item = cart.Items.FirstOrDefault(i => i.ProductId == id);
             if (item is null) return;
 
-            _logger.LogInformation("Удаление товара с id {0} из корзины [{1}]", id, _cartName);
+            _logger.LogInformation("Удаление товара с id {0}", id);
 
             cart.Items.Remove(item);
 
@@ -84,7 +76,7 @@ namespace WebStore9.Services.Services.InCookies
 
         public void Clear()
         {
-            _logger.LogInformation("Очистка корзины [{0}]", _cartName);
+            _logger.LogInformation("Очистка корзины");
 
             var cart = _cartStore.cart;
             cart.Items.Clear();
@@ -93,7 +85,7 @@ namespace WebStore9.Services.Services.InCookies
 
         public CartViewModel GetViewModel()
         {
-            _logger.LogInformation("Формирование модели представления для корзины [{0}]", _cartName);
+            _logger.LogInformation("Формирование модели представления для корзины");
 
             var products = _productData.GetProducts(new()
             {
