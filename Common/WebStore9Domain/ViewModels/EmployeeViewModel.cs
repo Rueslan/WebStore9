@@ -28,9 +28,9 @@ namespace WebStore9Domain.ViewModels
         [Range(18, 80, ErrorMessage = "Возраст должен быть в пределах от 18 до 80 лет")]
         public int Age { get; set; }
 
-        [Display(Name = "Опыт")]
-        [Required(ErrorMessage = "Опыт не указан")]
-        [Range(0, 10, ErrorMessage = "Опыт должен быть в пределах от 0 до 10")]
+        [Display(Name = "Стаж")]
+        [Required(ErrorMessage = "Стаж не указан")]
+        [Range(0, 10, ErrorMessage = "Стаж должен быть в пределах от 0 до 10")]
         public int Seniority { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

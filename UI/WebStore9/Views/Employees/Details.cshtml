@@ -1,52 +1,47 @@
 ﻿@model EmployeeViewModel
-
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Подробности о сотруднике id:" + Model.Id;
 }
 
 <div class="container">
-    <h3>Details</h3>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Patronymic)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Patronymic)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Age)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Age)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Seniority)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Seniority)
-        </dd>
-    </dl>
-</div>
-<div>
-    @* @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) | *@
-    <a asp-action="Index" class="btn btn-default">К списку</a>
+    <h1>@ViewData["Title"]</h1>
+
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Имя
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Name
+            </dd>
+            <dt class="col-sm-2">
+                Фамилия
+            </dt>
+            <dd class="col-sm-10">
+                @Model.LastName
+            </dd>
+            <dt class="col-sm-2">
+                Отчество
+            </dt>
+            <dd class="col-sm-10">
+                @(string.IsNullOrEmpty(Model.Patronymic) ? "Не указано" : Model.Patronymic)
+            </dd>
+            <dt class="col-sm-2">
+                Возраст
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Age
+            </dd>
+            <dt class="col-sm-2">
+                Стаж
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Seniority
+            </dd>
+        </dl>
+
+        <a asp-controller="Employees" asp-action="Index" class="btn btn-info">К списку</a>
+
+    </div>
 </div>
