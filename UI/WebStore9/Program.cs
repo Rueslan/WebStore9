@@ -106,7 +106,7 @@ namespace WebStore9
 
             app.MapControllers();
 
-            app.UseMiddleware<ExceptionHandlerMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

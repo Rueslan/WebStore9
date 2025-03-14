@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using WebStore9.DAL.Context;
+using WebStore9.Infrastructure.Middleware;
 using WebStore9.Interfaces.Services;
 using WebStore9.Logger;
 using WebStore9.Services.Data;
@@ -111,7 +112,7 @@ namespace WebStore9.WebAPI
                 app.UseSwaggerUI();
             }
 
-            app.UseMiddleware<ExceptionHandlerMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseRouting();
 
