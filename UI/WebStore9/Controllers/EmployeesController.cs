@@ -8,30 +8,19 @@ using WebStore9Domain.ViewModels;
 namespace WebStore9.Controllers;
 
 [ApiExplorerSettings(IgnoreApi = true)]
-[Route("Employees/[action]/{id?}")]
-[Route("stuff/[action]/{id?}")]
+//[Route("employees/[action]/{id?}")]
 [Authorize]
-public class EmployeesController : Controller
+public class EmployeesController(IEmployeesData employeesData, ILogger<EmployeesController> logger) : Controller
 {
-    private readonly IEmployeesData _EmplyeesData;
-    private readonly ILogger<EmployeesController> _Logger;
 
-    public EmployeesController(IEmployeesData EmplyeesData, ILogger<EmployeesController> Logger)
-    {
-        _EmplyeesData = EmplyeesData;
-        _Logger = Logger;
-    }
-
-    [Route("~/employees/all")]
     public IActionResult Index()
     {
-        return View(_EmplyeesData.GetAll());
+        return View(employeesData.GetAll());
     }
 
-    [Route("~/employees/info-{id}")]
     public IActionResult Details(int id)
     {
-        var employee = _EmplyeesData.GetById(id);
+        var employee = employeesData.GetById(id);
 
         if (employee == null)
             return NotFound();
@@ -41,7 +30,7 @@ public class EmployeesController : Controller
             Id = employee.Id,
             Name = employee.FirstName,
             LastName = employee.LastName,
-            Patronymic = employee.Patronymic,
+            Patronymic = employee.Patronymic ?? string.Empty,
             Age = employee.Age,
             Seniority = employee.Seniority
         });
@@ -60,18 +49,18 @@ public class EmployeesController : Controller
     {
         if (id < 0) return BadRequest();
 
-        var employee = _EmplyeesData.GetById(id);
+        var employee = employeesData.GetById(id);
         if (employee is null)
             return NotFound();
 
-        _EmplyeesData.Delete(id);
+        employeesData.Delete(id);
 
         return View(new EmployeeViewModel
         {
             Id = employee.Id,
             Name = employee.FirstName,
             LastName = employee.LastName,
-            Patronymic = employee.Patronymic,
+            Patronymic = employee.Patronymic ?? string.Empty,
             Age = employee.Age,
             Seniority = employee.Seniority
         });
@@ -81,7 +70,7 @@ public class EmployeesController : Controller
     [Authorize(Roles = Role.Administrators)]
     public IActionResult DeleteConfirmed(int id)
     {
-        _EmplyeesData.Delete(id);
+        employeesData.Delete(id);
 
         return RedirectToAction(nameof(Index));
     }
@@ -97,7 +86,7 @@ public class EmployeesController : Controller
         if (id == null)
             return View(new EmployeeViewModel());
 
-        var employee = _EmplyeesData.GetById((int)id);
+        var employee = employeesData.GetById((int)id);
 
         if (employee == null) return NotFound();
 
@@ -106,7 +95,7 @@ public class EmployeesController : Controller
             Id = employee.Id,
             Name = employee.FirstName,
             LastName = employee.LastName,
-            Patronymic = employee.Patronymic,
+            Patronymic = employee.Patronymic ?? string.Empty,
             Age = employee.Age,
             Seniority = employee.Seniority
         };
@@ -135,9 +124,9 @@ public class EmployeesController : Controller
         };
 
         if (employee.Id == 0)
-            _EmplyeesData.Add(employee);
+            employeesData.Add(employee);
         else
-            _EmplyeesData.Update(employee);
+            employeesData.Update(employee);
 
         return RedirectToAction(nameof(Index));
     }
