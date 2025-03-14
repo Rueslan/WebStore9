@@ -7,6 +7,7 @@ using WebStore9Domain.ViewModels;
 
 namespace WebStore9.Controllers;
 
+[ApiExplorerSettings(IgnoreApi = true)]
 [Route("Employees/[action]/{id?}")]
 [Route("stuff/[action]/{id?}")]
 [Authorize]
