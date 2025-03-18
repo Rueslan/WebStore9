@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using WebStore9.DAL.Context;
+using WebStore9.Infrastructure.Middleware;
 using WebStore9.Interfaces.Services;
 using WebStore9.Logger;
 using WebStore9.Services.Data;
+using WebStore9.Services.Services;
 using WebStore9.Services.Services.InCookies;
 using WebStore9.Services.Services.InMemory;
 using WebStore9.Services.Services.InSQL;
@@ -71,7 +73,8 @@ namespace WebStore9.WebAPI
 
             builder.Services.AddSingleton<IEmployeesData, InMemoryEmployeesData>();
             builder.Services.AddScoped<IProductData, SqlProductData>();
-            builder.Services.AddScoped<ICartService, InCookiesCartService>();
+            builder.Services.AddScoped<ICartStore, InCookiesCartStore>();
+            builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IOrderService, SqlOrderService>();
 
             builder.Services.AddControllers();
@@ -111,7 +114,7 @@ namespace WebStore9.WebAPI
                 app.UseSwaggerUI();
             }
 
-            app.UseMiddleware<ExceptionHandlerMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseRouting();
 
