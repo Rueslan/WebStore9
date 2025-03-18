@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using WebStore9.Interfaces;
 
@@ -24,6 +19,9 @@ namespace WebStore9.WebAPI.Tests.Controllers
             response.EnsureSuccessStatusCode();
 
             var values = await response.Content.ReadFromJsonAsync<IEnumerable<string>>();
+
+            //var parser = new HtmlParser();
+            //var html = parser.ParseDocument();
         }
     }
 }
