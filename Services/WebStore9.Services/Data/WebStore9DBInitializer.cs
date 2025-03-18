@@ -31,7 +31,7 @@ namespace WebStore9.Services.Data
             //var deleted = await _db.Database.EnsureDeletedAsync();
             //var db_created = await _db.Database.EnsureCreatedAsync();
 
-            if (_db.Database.ProviderName.EndsWith(".InMemory"))
+            if (_db.Database.ProviderName.EndsWith("InMemory") || _db.Database.ProviderName.EndsWith("Sqlite"))
                 await _db.Database.EnsureCreatedAsync();
             else
             {
@@ -116,16 +116,29 @@ namespace WebStore9.Services.Data
 
 
             _logger.LogInformation("Запись данных...");
-            await using (await _db.Database.BeginTransactionAsync())
+           
+            if (_db.Database.IsSqlServer())
+            {
+                await using (await _db.Database.BeginTransactionAsync())
+                {
+                    _db.Sections.AddRange(TestData.Sections);
+                    _db.Brands.AddRange(TestData.Brands);
+                    _db.Products.AddRange(TestData.Products);
+                    _db.Employees.AddRange(TestData.Employees);
+
+                    await _db.SaveChangesAsync();
+                    await _db.Database.CommitTransactionAsync();
+                }
+            }
+            else
             {
                 _db.Sections.AddRange(TestData.Sections);
                 _db.Brands.AddRange(TestData.Brands);
                 _db.Products.AddRange(TestData.Products);
                 _db.Employees.AddRange(TestData.Employees);
-
                 await _db.SaveChangesAsync();
-                await _db.Database.CommitTransactionAsync();
             }
+
             _logger.LogInformation("Запись данных выполнена успешно за {0} мс", timer.Elapsed.TotalMilliseconds);
 
         }
