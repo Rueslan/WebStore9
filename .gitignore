@@ -374,3 +374,4 @@ FodyWeavers.xsd
 /WebStore9/WebStore9.db-wal
 /Common/WebStore9Domain/WebStore9.Domain.xml
 /Services/WebStore9.WebAPI/WebStore9.WebAPI.xml
+/Services/WebStore9.WebAPI/WebStore9.db

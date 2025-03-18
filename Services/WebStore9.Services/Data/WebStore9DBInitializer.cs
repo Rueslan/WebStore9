@@ -31,7 +31,7 @@ namespace WebStore9.Services.Data
             //var deleted = await _db.Database.EnsureDeletedAsync();
             //var db_created = await _db.Database.EnsureCreatedAsync();
 
-            if (_db.Database.ProviderName.EndsWith(".InMemory"))
+            if (_db.Database.ProviderName.EndsWith("InMemory") || _db.Database.ProviderName.EndsWith("Sqlite"))
                 await _db.Database.EnsureCreatedAsync();
             else
             {
