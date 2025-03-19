@@ -84,7 +84,7 @@ namespace WebStore9.WebAPI
             {
                 const string webstore_api_xml = "WebStore9.WebAPI.xml";
                 const string webstore_domain_xml = "WebStore9.Domain.xml";
-                const string debug_path = "bin/debug/net8.0";
+                const string debug_path = "bin/debug/net9.0";
 
                 if (File.Exists(webstore_api_xml))
                     c.IncludeXmlComments(webstore_api_xml);

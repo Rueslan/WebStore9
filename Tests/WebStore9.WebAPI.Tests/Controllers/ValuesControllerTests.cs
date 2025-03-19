@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Json;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using WebStore9.Interfaces;
 
 namespace WebStore9.WebAPI.Tests.Controllers
