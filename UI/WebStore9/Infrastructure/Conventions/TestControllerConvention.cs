@@ -6,7 +6,10 @@ namespace WebStore9.Infrastructure.Conventions
     {
         public void Apply(ControllerModel controller)
         {
-            
+            if (controller.ControllerName.Contains("Test"))
+            {
+                controller.ApiExplorer.IsVisible = false;
+            }
         }
     }
 }

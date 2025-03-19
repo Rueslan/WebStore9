@@ -14,13 +14,13 @@ namespace WebStore9.Controllers
 
         public IActionResult Index(int? brandId, int? sectionId)
         {
-            var Filter = new ProductFilter
+            var filter = new ProductFilter
             {
                 BrandId = brandId,
                 SectionId = sectionId,
             };
 
-            var products = _productData.GetProducts(Filter);
+            var products = _productData.GetProducts(filter);
 
             var viewModel = new CatalogViewModel
             {
@@ -32,9 +32,9 @@ namespace WebStore9.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Details(int Id)
+        public IActionResult Details(int id)
         {
-            var product = _productData.GetProductById(Id);
+            var product = _productData.GetProductById(id);
 
             if (product is null)
                 return NotFound();

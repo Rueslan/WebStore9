@@ -7,27 +7,27 @@ namespace WebStore9.Controllers
 {
     public class CartController : Controller
     {
-        private readonly ICartService _сartService;
+        private readonly ICartService _cartService;
 
-        public CartController(ICartService сartService) => _сartService = сartService;
+        public CartController(ICartService cartService) => _cartService = cartService;
 
-        public IActionResult Index() => View(new CartOrderViewModel{Cart = _сartService.GetViewModel()});
+        public IActionResult Index() => View(new CartOrderViewModel{Cart = _cartService.GetViewModel()});
 
-        public IActionResult Add(int Id)
+        public IActionResult Add(int id)
         {
-            _сartService.Add(Id);
+            _cartService.Add(id);
             return RedirectToAction("Index", "Cart");
         }
 
-        public IActionResult Decrement(int Id)
+        public IActionResult Decrement(int id)
         {
-            _сartService.Decrement(Id);
+            _cartService.Decrement(id);
             return RedirectToAction("Index", "Cart");
         }
 
-        public IActionResult Remove(int Id)
+        public IActionResult Remove(int id)
         {
-            _сartService.Remove(Id);
+            _cartService.Remove(id);
             return RedirectToAction("Index", "Cart");
         }
 
@@ -38,16 +38,16 @@ namespace WebStore9.Controllers
             if (!ModelState.IsValid)
                 return View(nameof(Index), new CartOrderViewModel
                 {
-                    Cart = _сartService.GetViewModel(),
+                    Cart = _cartService.GetViewModel(),
                     Order = orderViewModel,
                 });
 
             var order = orderService.CreateOrder(
-                User.Identity!.Name,
-                _сartService.GetViewModel(),
+                User.Identity!.Name!,
+                _cartService.GetViewModel(),
                 orderViewModel);
 
-            _сartService.Clear();
+            _cartService.Clear();
 
             return RedirectToAction(nameof(OrderConfirmed), new { order.Id });
         }
