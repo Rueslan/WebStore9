@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Services\WebStore9.Interfaces\WebStore9.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Services\WebStore9.WebAPI\WebStore9.WebAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

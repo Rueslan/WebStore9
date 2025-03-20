@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.OpenApi.Models;
 using WebStore9.DAL.Context;
 using WebStore9.Infrastructure.Middleware;
 using WebStore9.Interfaces.Services;
@@ -95,6 +96,8 @@ namespace WebStore9.WebAPI
                     c.IncludeXmlComments(webstore_domain_xml);
                 else if (File.Exists(Path.Combine(debug_path, webstore_domain_xml)))
                     c.IncludeXmlComments(Path.Combine(debug_path, webstore_domain_xml));
+
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebStore9 API", Version = "v1" });
             });
 
             var app = builder.Build();
@@ -111,7 +114,10 @@ namespace WebStore9.WebAPI
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebStore9 API v1");
+                }); ;
             }
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
