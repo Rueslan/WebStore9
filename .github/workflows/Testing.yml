@@ -40,4 +40,4 @@ jobs:
       run: find . -type f -name "*.dll" | grep -i 'bin/Debug' || echo "No DLLs found"
 
     - name: Test solution
-      run: dotnet test --verbosity normal
+      run: dotnet test --no-build --verbosity normal
