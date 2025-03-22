@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -80,27 +79,33 @@ namespace WebStore9.WebAPI
 
             builder.Services.AddControllers();
 
+            builder.Services
+                .AddEndpointsApiExplorer()
+                .AddSwaggerGen(options =>
+                {
+                    options.EnableAnnotations();
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "WebStore9 API", Version = "v1" });
+
+                    const string webstore_api_xml = "WebStore9.WebAPI.xml";
+                    const string webstore_domain_xml = "WebStore9.Domain.xml";
+                    const string debug_path = "bin/debug/net9.0";
+
+                    if (File.Exists(webstore_api_xml))
+                        options.IncludeXmlComments(webstore_api_xml);
+                    else if (File.Exists(Path.Combine(debug_path, webstore_api_xml)))
+                        options.IncludeXmlComments(Path.Combine(debug_path, webstore_api_xml));
+
+                    if (File.Exists(webstore_domain_xml))
+                        options.IncludeXmlComments(webstore_domain_xml);
+                    else if (File.Exists(Path.Combine(debug_path, webstore_domain_xml)))
+                        options.IncludeXmlComments(Path.Combine(debug_path, webstore_domain_xml));
+                });
+
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
-            {
-                const string webstore_api_xml = "WebStore9.WebAPI.xml";
-                const string webstore_domain_xml = "WebStore9.Domain.xml";
-                const string debug_path = "bin/debug/net9.0";
-
-                if (File.Exists(webstore_api_xml))
-                    c.IncludeXmlComments(webstore_api_xml);
-                else if (File.Exists(Path.Combine(debug_path, webstore_api_xml)))
-                    c.IncludeXmlComments(Path.Combine(debug_path, webstore_api_xml));
-
-                if (File.Exists(webstore_domain_xml))
-                    c.IncludeXmlComments(webstore_domain_xml);
-                else if (File.Exists(Path.Combine(debug_path, webstore_domain_xml)))
-                    c.IncludeXmlComments(Path.Combine(debug_path, webstore_domain_xml));
-
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebStore9 API", Version = "v1" });
-            });
 
             var app = builder.Build();
+
+            //app.MapHealthChecks("/health");
 
             app.Services.GetRequiredService<ILoggerFactory>().AddLog4Net();
 
@@ -110,15 +115,15 @@ namespace WebStore9.WebAPI
                 await initializer.InitializeAsync();
             }
 
-            // Configure the HTTP request pipeline.
+
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebStore9 API v1");
-                }); ;
+                app.MapOpenApi();
+                app.UseSwagger().UseSwaggerUI();
             }
+
+            app.MapGet("/", () => Results.LocalRedirect("/swagger")).ExcludeFromDescription();
+
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
