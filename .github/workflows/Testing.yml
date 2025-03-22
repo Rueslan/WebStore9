@@ -15,10 +15,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Setup .NET 9.0 (preview)
+    - name: Setup .NET 9.0
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.100-preview.*
+        dotnet-version: 9.0.202
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
