@@ -4,40 +4,26 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     env:
       DatabaseType: Sqlite
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup .NET 9.0
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.202
+      - name: Use .NET SDK version from global.json
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
 
-    - name: Display .NET info
-      run: dotnet --info
+      - run: dotnet --info
 
-    - name: Clear NuGet cache
-      run: dotnet nuget locals all --clear
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Clean solution
-      run: dotnet clean
+      - name: Build
+        run: dotnet build --no-restore --configuration Debug
 
-    - name: Delete all bin/obj folders
-      run: find . -type d \( -iname bin -o -iname obj \) -exec rm -rf {} +
-
-    - name: Restore dependencies
-      run: dotnet restore
-
-    - name: Build solution
-      run: dotnet build --no-restore --configuration Debug
-
-    - name: Show test binaries (for debug)
-      run: find . -type f -name "*.dll" | grep -i 'bin/Debug' || echo "No DLLs found"
-
-    - name: Test solution
-      run: dotnet test --no-build --verbosity normal
+      - name: Test
+        run: dotnet test --no-build --verbosity normal --configuration Debug
