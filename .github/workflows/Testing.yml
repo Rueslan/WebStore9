@@ -10,20 +10,21 @@ jobs:
       DatabaseType: Sqlite
 
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Use .NET SDK version from global.json
-        uses: actions/setup-dotnet@v4
-        with:
-          global-json-file: global.json
+    - name: Setup .NET 9.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.202
+        
+    - name: Display .NET info
+      run: dotnet --info
 
-      - run: dotnet --info
+    - name: Restore dependencies
+      run: dotnet restore
 
-      - name: Restore dependencies
-        run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore --configuration Debug
 
-      - name: Build
-        run: dotnet build --no-restore --configuration Debug
-
-      - name: Test
-        run: dotnet test --no-build --verbosity normal --configuration Debug
+    - name: Test
+      run: dotnet test --no-build --verbosity normal --configuration Debug
