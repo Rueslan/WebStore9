@@ -1,77 +1,30 @@
 ﻿<Project Sdk="MSTest.Sdk/3.6.4">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <UseVSTest>true</UseVSTest>
-  </PropertyGroup>
-	
-	      <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Moq" Version="4.20.72" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<UseVSTest>true</UseVSTest>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\UI\WebStore9\WebStore9.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="MSTest.Analyzers" Version="3.8.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="MSTest.TestAdapter" Version="3.8.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="MSTest.TestFramework" Version="3.8.2" />
-  </ItemGroup>	<ItemGroup>
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
+	<ItemGroup>
+		<PackageReference Include="coverlet.collector" Version="6.0.4" PrivateAssets="all">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Moq" Version="4.20.72" />
 		<PackageReference Include="xunit" Version="2.9.3" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+		<PackageReference Include="MSTest.Analyzers" Version="3.8.2" PrivateAssets="all">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="MSTest.TestAdapter" Version="3.8.2" />
+		<PackageReference Include="MSTest.TestFramework" Version="3.8.2" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\UI\WebStore9\WebStore9.csproj" />
+		<ProjectReference Include="..\..\Services\WebStore9.Services\WebStore9.Services.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Update="MSTest.Analyzers" Version="3.8.2">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Update="MSTest.TestAdapter" Version="3.8.2" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Update="MSTest.TestFramework" Version="3.8.2" />
-	</ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Services\WebStore9.Services\WebStore9.Services.csproj" />
-  </ItemGroup>
 
 </Project>
