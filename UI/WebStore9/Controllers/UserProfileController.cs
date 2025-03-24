@@ -14,7 +14,7 @@ namespace WebStore9.Controllers
         {
             var orders = await orderService.GetUserOrders(User.Identity.Name);
 
-            return View(orders.Select(o => new UserOrderViewModel
+            var result = orders.Select(o => new UserOrderViewModel
             {
                 Id = o.Id,
                 Phone = o.Phone,
@@ -22,7 +22,9 @@ namespace WebStore9.Controllers
                 Description = o.Description,
                 TotalPrice = o.TotalPrice,
                 Date = o.Date,
-            }));
+            });
+
+            return View(result);
         }
     }
 }

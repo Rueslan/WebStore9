@@ -54,7 +54,7 @@ namespace WebStore9Domain.DTO
             : new OrderItem
             {
                 Id = itemDto.Id,
-                Product = new Product{ Id = itemDto.Id },
+                Product = new Product { Id = itemDto.ProductId },
                 Price = itemDto.Price,
                 Quantity = itemDto.Quantity,
             };
@@ -97,7 +97,7 @@ namespace WebStore9Domain.DTO
 
         public static CartViewModel ToCartView(this IEnumerable<OrderItemDTO> items) => new()
         {
-            Items = items.Select(p => (new ProductViewModel{Id = p.Id}, p.Quantity))
+            Items = items.Select(p => (new ProductViewModel { Id = p.ProductId, Price = p.Price }, p.Quantity))
         };
     }
 }
