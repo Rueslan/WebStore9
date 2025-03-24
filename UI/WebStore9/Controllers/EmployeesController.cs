@@ -15,15 +15,20 @@ public class EmployeesController(IEmployeesData employeesData, ILogger<Employees
 
     public IActionResult Index()
     {
+        logger.LogInformation("Отображение списка сотрудников");
         return View(employeesData.GetAll());
     }
 
     public IActionResult Details(int id)
     {
+        logger.LogInformation("Запрошены детали сотрудника с id = {id}", id);
         var employee = employeesData.GetById(id);
 
-        if (employee == null)
+        if (employee is null)
+        {
+            logger.LogWarning("Сотрудник с id = {id} не найден", id);
             return NotFound();
+        }
 
         return View(new EmployeeViewModel
         {
@@ -39,6 +44,7 @@ public class EmployeesController(IEmployeesData employeesData, ILogger<Employees
     [Authorize(Roles = Role.Administrators)]
     public IActionResult Create()
     {
+        logger.LogInformation("Открытие формы создания нового сотрудника");
         return View("Edit", new EmployeeViewModel());
     }
 
@@ -47,11 +53,21 @@ public class EmployeesController(IEmployeesData employeesData, ILogger<Employees
     [Authorize(Roles = Role.Administrators)]
     public IActionResult Delete(int id)
     {
-        if (id < 0) return BadRequest();
+        logger.LogInformation("Попытка удалить сотрудника с id = {id}", id);
+
+        if (id < 0)
+        {
+            logger.LogWarning("Передан некорректный id для удаления: {id}", id);
+            return BadRequest();
+        }
 
         var employee = employeesData.GetById(id);
+
         if (employee is null)
+        {
+            logger.LogWarning("Сотрудник с id = {id} не найден для удаления", id);
             return NotFound();
+        }
 
         employeesData.Delete(id);
 
@@ -71,6 +87,8 @@ public class EmployeesController(IEmployeesData employeesData, ILogger<Employees
     public IActionResult DeleteConfirmed(int id)
     {
         employeesData.Delete(id);
+
+        logger.LogInformation("Сотрудник с id = {id} удалён", id);
 
         return RedirectToAction(nameof(Index));
     }
@@ -107,11 +125,18 @@ public class EmployeesController(IEmployeesData employeesData, ILogger<Employees
     [Authorize(Roles = Role.Administrators)]
     public IActionResult Edit(EmployeeViewModel model)
     {
-        if (model.Name == "мат")
-            ModelState.AddModelError("", "Низзя!");
+        if (model.Name.Contains("бл"))
+        {
+            logger.LogWarning("Попытка создать/изменить сотрудника с недопустимым именем");
+            ModelState.AddModelError("", "недопустимое именя!");
+        }
 
         if (!ModelState.IsValid)
+        {
+            logger.LogWarning("Модель сотрудника невалидна при сохранении");
             return View(model);
+        }
+
 
         var employee = new Employee
         {
@@ -124,9 +149,15 @@ public class EmployeesController(IEmployeesData employeesData, ILogger<Employees
         };
 
         if (employee.Id == 0)
+        {
+            logger.LogInformation("Добавлен новый сотрудник: {Name} {LastName}", employee.FirstName, employee.LastName);
             employeesData.Add(employee);
+        }
         else
+        {
+            logger.LogInformation("Обновлён сотрудник с id = {Id}", employee.Id);
             employeesData.Update(employee);
+        }
 
         return RedirectToAction(nameof(Index));
     }
