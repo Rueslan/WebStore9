@@ -10,7 +10,7 @@ namespace WebStore9.Components
 
         public SectionsViewComponent(IProductData productData) => _productData = productData;
 
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(string sectionId)
         {
             var sections = _productData.GetSections();
 

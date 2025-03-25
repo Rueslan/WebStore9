@@ -10,7 +10,7 @@ namespace WebStore9.Components
 
         public BrandsViewComponent(IProductData productData) => _productData = productData;
 
-        public IViewComponentResult Invoke() => View(GetBrandsAsync());
+        public IViewComponentResult Invoke(string brandId) => View(GetBrandsAsync());
 
         private IEnumerable<BrandViewModel> GetBrandsAsync()
         {
