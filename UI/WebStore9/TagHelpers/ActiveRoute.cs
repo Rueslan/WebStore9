@@ -8,40 +8,43 @@ namespace WebStore9.TagHelpers
     public class ActiveRoute : TagHelper
     {
         private const string AttributeName = "ws-is-active-route";
+        private const string IgnoreAction = "ws-ignore-action";
 
         [HtmlAttributeName("asp-controller")]
-        public string Controller { get; set; }
+        public string controller { get; set; }
 
         [HtmlAttributeName("asp-action")]
-        public string Action { get; set; }
+        public string action { get; set; }
 
         [HtmlAttributeName("asp-all-route-data", DictionaryAttributePrefix = "asp-route-")]
-        public Dictionary<string, string> RouteValuesDictionary { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+        public Dictionary<string, string> routeValuesDictionary { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
         [ViewContext, HtmlAttributeNotBound]
-        public ViewContext ViewContext { get; set; }
+        public ViewContext viewContext { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            if (IsActive())
+            var isIgnoreAction = output.Attributes.RemoveAll(IgnoreAction);
+
+            if (IsActive(isIgnoreAction))
                 MakeActive(output);
 
             output.Attributes.RemoveAll(AttributeName);
         }
 
-        private bool IsActive()
+        private bool IsActive(bool ignoreAction)
         {
-            var routeValues = ViewContext.RouteData.Values;
+            var routeValues = viewContext.RouteData.Values;
             var routeController = routeValues["controller"]?.ToString();
             var routeAction = routeValues["action"]?.ToString();
 
-            if (Action is { Length: > 0 } action && !string.Equals(action, routeAction))
+            if (!ignoreAction && this.action is { Length: > 0 } action && !string.Equals(action, routeAction))
                 return false;
 
-            if (Controller is { Length: > 0 } controller && !string.Equals(controller, routeController))
+            if (this.controller is { Length: > 0 } controller && !string.Equals(controller, routeController))
                 return false;
 
-            foreach (var (key, value) in RouteValuesDictionary)
+            foreach (var (key, value) in routeValuesDictionary)
             {
                 if (!routeValues.ContainsKey(key) || routeValues[key]?.ToString() != value)
                     return false;
@@ -52,7 +55,7 @@ namespace WebStore9.TagHelpers
 
         private void MakeActive(TagHelperOutput output)
         {
-            var classAttribute = output.Attributes.FirstOrDefault(atr => atr.Name == "class");
+            var classAttribute = output.Attributes.FirstOrDefault(attr => attr.Name == "class");
 
             if (classAttribute is null)
             {
