@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebStore9.Interfaces.Services;
+using WebStore9.ViewModels;
 using WebStore9Domain.ViewModels;
 
 namespace WebStore9.Components
@@ -10,8 +11,24 @@ namespace WebStore9.Components
 
         public SectionsViewComponent(IProductData productData) => _productData = productData;
 
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(string sectionId)
         {
+            var section_id = int.TryParse(sectionId, out var id) ? id : (int?)null;
+
+            var sections = GetSections(section_id, out var parentSectionId);
+
+            return View(new SelectableSectionsViewModel
+            {
+                Sections = sections,
+                SectionId = section_id,
+                ParentSectionId = parentSectionId
+            });
+        }
+
+        private IEnumerable<SectionViewModel> GetSections(int? sectionId, out int? parentSectionId)
+        {
+            parentSectionId = null;
+
             var sections = _productData.GetSections();
 
             var parent_sections = sections.Where(s => s.ParentId is null);
@@ -31,6 +48,9 @@ namespace WebStore9.Components
 
                 foreach (var child_section in childs)
                 {
+                    if (child_section.Id == sectionId) 
+                        parentSectionId = child_section.ParentId;
+
                     parent_section.ChildSections.Add(new SectionViewModel
                     {
                         Id = child_section.Id,
@@ -45,7 +65,7 @@ namespace WebStore9.Components
 
             parent_sections_views.Sort((a, b) => Comparer<int>.Default.Compare(a.Order, b.Order));
 
-            return View(parent_sections_views);
+            return parent_sections_views;
         }
     }
 }
