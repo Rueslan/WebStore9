@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Polly;
+using Polly.Extensions.Http;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
@@ -69,7 +71,28 @@ namespace WebStore9
                 .AddTypedClient<IValuesService, ValuesClient>()
                 .AddTypedClient<IEmployeesData, EmployeesClient>()
                 .AddTypedClient<IProductData, ProductsClient>()
-                .AddTypedClient<IOrderService, OrdersClient>();
+                .AddTypedClient<IOrderService, OrdersClient>()
+                .SetHandlerLifetime(TimeSpan.FromMinutes(5))
+                .AddPolicyHandler(GetRetryPolicy())
+                .AddPolicyHandler(GetCircuitBreakerPolicy() );
+
+            static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(int maxRetryCount = 5, int maxJitterTime = 1000)
+            {
+                var jitter = new Random();
+
+                return HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .WaitAndRetryAsync(maxRetryCount, RetryAttempt =>
+                        TimeSpan.FromSeconds(Math.Pow(2, RetryAttempt)) + 
+                        TimeSpan.FromMilliseconds(jitter.Next(0, maxJitterTime)));
+            }
+
+            static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+            {
+                return HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .CircuitBreakerAsync(handledEventsAllowedBeforeBreaking: 5, TimeSpan.FromSeconds(5));
+            }
 
             builder.Services.AddControllersWithViews(opt => opt.Conventions.Add(new TestControllerConvention()))
                 .AddRazorRuntimeCompilation();
