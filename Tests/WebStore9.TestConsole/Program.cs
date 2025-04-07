@@ -1,10 +1,16 @@
-﻿namespace WebStore9.TestConsole
+﻿using Clients;
+
+namespace WebStore9.TestConsole
 {
-    internal class Program
+    public class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            var client = new HttpClient { BaseAddress = new Uri("http://localhost:5025") };
+
+            var api = new WebAPIClient("", client);
+
+            var products = await api.EmployeesGET2Async(2);
         }
     }
 }
